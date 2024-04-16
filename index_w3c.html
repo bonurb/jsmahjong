@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The Document Object</h1>
+<h2>The images Property</h2>
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:690px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:690px; left:1400px">
+<img src="images/MJt1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:690px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:620px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:620px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:620px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:550px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:550px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:550px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:480px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:480px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:480px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:410px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:410px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:410px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:340px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:340px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:340px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:270px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:270px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:270px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:200px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:200px; left:1400px">
+<img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:200px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:95px; left:1280px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:130px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:130px; left:1400px">
+<img src="images/MJt1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:130px; left:1460px">
+
+<img src="images/MJt2-.svg" id="15-10-1" onclick="play(this)" alt="flower" width="100" height="80" style="position:absolute; top:60px; left:1340px">
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:60px; left:1400px">
+<img src="images/MJt1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:60px; left:1460px">
+
+<img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:95px; left:1365px">
+<!--img src="MJt2-.svg" alt="flower" width="100" height="80" style="position:absolute; top:95px; left:1280px"-->
+
+<!--img src="MJt1-.svg" alt="flower" width="100" height="120" style="position:absolute; top:60px; 
+  left:30px; border:5px solid #a71b1be5"-->
+  <img src="images/MJs1-.svg" alt="flower" width="100" height="80" style="position:absolute; top:60px; left:30px">
+  <img src="images/MJt2-.svg" alt="flower" width="100" height="80" style="filter:brightness(70%); position:absolute; top:70px; left:20px">
+
+  <audio id="audio" src="images/67.wav"></audio>
+  
+  <p>Display the URL of each img element:</p>
+  <p id="demo"></p>
+
+<script>
+function pseudoRandom(seed) {
+  let value = seed;
+
+  return function() {
+    value = value * 16807 % 2147483647;
+    return (value -1) / 2147483647;
+  }
+}
+
+let generator = pseudoRandom(1);
+
+function play(img) {
+        var audio = document.getElementById("audio");
+        audio.play();
+        alert(img.id);
+      }
+
+//--------------------------
+
+  // der Tile Raum: 26 x 12 x 7
+  const MAX_X = 26;
+  const MAX_Y = 12;
+  const MAXLEV = 7;
+  const mjCube = [26][12][7];
+
+const myImages = document.images;
+let text = "";
+for (let i = 0; i < myImages.length; i++) {
+  text +=  myImages[i].src + ", " + myImages[i].style.position + ", " + myImages[i].style.top + "<br>";
+}
+myImages[1].style.top = "750px";
+myImages[2].style.visibility = "hidden";
+
+document.getElementById("demo").innerHTML = text;
+</script>
+
+</body>
+</html>
