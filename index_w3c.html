@@ -263,6 +263,8 @@
     const MAX_Y = 15;
     const MAXLEV = 7;
     const OFFSET = 10;
+    const DX = 6;
+    const DY = 6;
     let mjCube = new Array(MAX_X);
 
     for (let i = 0; i < MAX_X; i++) {
@@ -273,31 +275,46 @@
     }
 
     function resetMjCube() {
-      for (let x = 0; x < 26; x++) {
-        for (let y = 0; y < 12; y++) {
-          for (let z = 0; z < 7; z++) {
+      for (let x = 0; x < MAX_X; x++) {
+        for (let y = 0; y < MAX_Y; y++) {
+          for (let z = 0; z < MAXLEV; z++) {
             mjCube[x][y][z] = "-1";
           }
         }
       }
     }
 
+    function resetZIndex() {
+      for (let i = 0; i < 144; i++) {
+        tiles[i].img.style.zIndex = "unset";
+      }
+    }
+
     function dropTile(x, y, tileId) {
       let z = 0;
+      let xp = x + 1;
+      let yp = y + 1;
+      if (xp == MAX_X) {
+        xp = x;
+      }
+      if (yp == MAX_Y) {
+        yp = y;
+      }
 
       for (let i = 0; i < MAXLEV; i++) {
-        if ((mjCube[x][y][z] == -1) && (mjCube[x + 1][y][z] == -1) && (mjCube[x][y + 1][z] == -1) && (mjCube[x + 1][y + 1][z] == -1)) {
+        if ((mjCube[x][y][z] == -1) && (mjCube[xp][y][z] == -1)
+          && (mjCube[x][yp][z] == -1) && (mjCube[xp][yp][z] == -1)) {
           break;
         }
         z++;
-        if (z > MAXLEV) {
+        if (z == MAXLEV) {
           return -1;
         }
       }
       mjCube[x][y][z] = tileId;
-      mjCube[x + 1][y][z] = tileId;
-      mjCube[x][y + 1][z] = tileId;
-      mjCube[x + 1][y + 1][z] = tileId;
+      mjCube[xp][y][z] = tileId;
+      mjCube[x][yp][z] = tileId;
+      mjCube[xp][yp][z] = tileId;
 
       return z;
     }
@@ -314,8 +331,24 @@
         tile.y = loy;
         tile.z = z;
         tile.img.style.visibility = "visible";
-        tile.img.style.left = (lox * 25) + OFFSET + "px";
-        tile.img.style.top = (loy * 35) + OFFSET + "px";
+        tile.img.style.left = (lox * 24) + OFFSET - (z * DX) + "px";
+        tile.img.style.top = (loy * 28) + OFFSET + (z * DX) + "px";
+      }
+    }
+
+    function adjustZIndex() {
+      let zi = 5;
+      for (let x = 0; x < MAX_X; x++) {
+        for (let y = MAX_Y - 1; y >= 0; y--) {
+          for (let z = 0; z < MAXLEV; z++) {
+            if (mjCube[x][y][z] != -1) {
+              let tile = tiles[mjCube[x][y][z]];
+              if (tile.img.style.zIndex == "unset") {
+                tile.img.style.zIndex = zi++;
+              }
+            }
+          }
+        }
       }
     }
     // der Tile Raum
@@ -350,13 +383,16 @@
     let t = 0;
     for (let i = 0; i < docimgs.length; i++) {
       if (types.includes(docimgs[i].alt)) {
-        tiles[t] = new Tile(docimgs[i].src, docimgs[i].alt);
+        tiles[t] = new Tile(docimgs[i], docimgs[i].alt);
         t++;
       }
     }
 
     resetMjCube();
+    resetZIndex();
     getGame(333);
+    fillMjCube(layoutPyramid);
+    adjustZIndex();
 
 
   </script>
