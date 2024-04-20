@@ -4,7 +4,7 @@
 <head>
   <style>
     body {
-      background-image: url('images/backgr_stairs-50x.jpg');
+      background-image: url('images/backgr_stairs-50.jpg');
     }
   </style>
 </head>
@@ -262,9 +262,9 @@
     const MAX_X = 29;
     const MAX_Y = 15;
     const MAXLEV = 7;
-    const OFFSET = 10;
-    const DX = 6;
-    const DY = 6;
+    const OFFSET = 40;
+    const DX = 8;
+    const DY = 7;
     let mjCube = new Array(MAX_X);
 
     for (let i = 0; i < MAX_X; i++) {
@@ -331,17 +331,17 @@
         tile.y = loy;
         tile.z = z;
         tile.img.style.visibility = "visible";
-        tile.img.style.left = (lox * 24) + OFFSET - (z * DX) + "px";
-        tile.img.style.top = (loy * 28) + OFFSET + (z * DX) + "px";
-        tile.img.setAttribute("ix", lox);
+        tile.img.style.left = (lox * 26) + OFFSET - (z * DX) + "px";
+        tile.img.style.top = (loy * 32) + OFFSET + (z * DY) + "px";
+        // tile.img.setAttribute("data-ix", "my data: " + lox);
       }
     }
 
     function adjustZIndex() {
       let zi = 5;
-      for (let x = 0; x < MAX_X; x++) {
+      for (let z = 0; z < MAXLEV; z++) {
         for (let y = MAX_Y - 1; y >= 0; y--) {
-          for (let z = 0; z < MAXLEV; z++) {
+          for (let x = 0; x < MAX_X; x++) {
             if (mjCube[x][y][z] != -1) {
               let tile = tiles[mjCube[x][y][z]];
               if (tile.img.style.zIndex == "unset") {
@@ -375,13 +375,11 @@
     let t = 0;
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].onclick = function (e) {
-
-        e.target.style.zIndex++;
+        // e.target.style.zIndex++;
         let til = tiles[e.target.id];
         alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
-          + "," + til.x + "-" + til.y + "-" + til.z);
+          + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
       };
-      // ("click", play.bind(docimgs[i]), false);
       if (types.includes(docimgs[i].alt)) {
         tiles[t] = new Tile(docimgs[i], docimgs[i].alt);
         docimgs[i].id = "" + t;
