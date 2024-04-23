@@ -204,8 +204,8 @@
   <script>
     // const layoutPyramid = [
     //   [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
-    //   [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2]
-    // ];
+    //   [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2], [4, 4], [6, 4],
+    //   [8, 4], [10, 4], [12, 4], [14, 4], [16, 4], [18, 4], [20, 4], [22, 4], [8, 2], [11, 2]    ];
     const layoutPyramid = [
       [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
       [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2], [4, 4], [6, 4],
@@ -267,8 +267,8 @@
     const MAX_Y = 15;
     const MAXLEV = 7;
     const OFFSET = 40;
-    const DX = 3;
-    const DY = 3;
+    const DX = 7;
+    const DY = 7;
     let mjCube = new Array(MAX_X);
 
     for (let i = 0; i < MAX_X; i++) {
@@ -290,7 +290,7 @@
 
     function resetZIndex() {
       for (let i = 0; i < 144; i++) {
-        tiles[i].img.style.zIndex = "unset";
+        tiles[i].img.style.zIndex = -1;
       }
     }
 
@@ -324,7 +324,7 @@
     }
 
     function fillMjCube(layout) {
-      for (let lo = 0; lo < 144; lo++) {
+      for (let lo = 0; lo < layout.length; lo++) {
         let lox = layout[lo][0];
         let loy = layout[lo][1];
         let tid = tileIds[lo];
@@ -335,21 +335,21 @@
         tile.y = loy;
         tile.z = z;
         tile.img.style.visibility = "visible";
-        tile.img.style.left = (lox * 25) + OFFSET + (z * DX) + "px";
-        tile.img.style.top = (loy * 35) + OFFSET - (z * DY) + "px";
+        tile.img.style.left = (lox * 23) + OFFSET + (z * DX) + "px";
+        tile.img.style.top = (loy * 33) + OFFSET - (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
       }
     }
 
     function adjustZIndex() {
       let zi = 5; z = 0; y = 0;
-      for (let z = MAXLEV; z < MAXLEV; z++) {
+      for (let z = 0; z < MAXLEV; z++) {
         for (let y = 0; y < MAX_Y; y++) {
-            for (let x = MAX_X; x >= 0; x--) {
+            for (let x = MAX_X -1; x >= 0; x--) {
             if (mjCube[x][y][z] != -1) {
               let tile = tiles[mjCube[x][y][z]];
-              if (tile.img.style.zIndex == "unset") {
-                // tile.img.style.zIndex = zi++;
+              if (tile.img.style.zIndex == -1) {
+                tile.img.style.zIndex = zi++;
               }
             }
           }
