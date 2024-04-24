@@ -263,8 +263,8 @@
     const MAX_Y = 15;
     const MAXLEV = 7;
     const OFFSET = 40;
-    const DX = 3;
-    const DY = 3;
+    const DX = 10;
+    const DY = 10;
     let mjCube = new Array(MAX_X);
 
     for (let i = 0; i < MAX_X; i++) {
@@ -331,8 +331,8 @@
         tile.y = loy;
         tile.z = z;
         tile.img.style.visibility = "visible";
-        tile.img.style.left = (lox * 24) + OFFSET + (z * DX) + "px";
-        tile.img.style.top = (loy * 30) + OFFSET - (z * DY) + "px";
+        tile.img.style.left = (lox * 23) + OFFSET - (z * DX) + "px";
+        tile.img.style.top = (loy * 29) + OFFSET + (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
       }
     }
@@ -340,8 +340,8 @@
     function adjustZIndex() {
       let zi = 5;
       for (let z = 0; z < MAXLEV; z++) {
-          for (let x = 0; x < MAX_X; x++) {
-        for (let y = MAX_Y - 1; y >= 0; y--) {
+        for (let x = 0; x < MAX_X; x++) {
+          for (let y = MAX_Y - 1; y >= 0; y--) {
             if (mjCube[x][y][z] != -1) {
               let tile = tiles[mjCube[x][y][z]];
               if (tile.img.style.zIndex == "unset") {
