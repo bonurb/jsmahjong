@@ -249,10 +249,9 @@
       }
     }
 
-    function play(img) {
+    function play() {
       var audio = document.getElementById("audio");
       audio.play();
-      alert(img.id);
     }
 
     //--------------------------
@@ -366,20 +365,43 @@
         this.z = -1;
       }
     }
+
+    function remove(til, til2) {
+
+    }
     // Tile
     //--------------------------
 
 
     let docimgs = document.images;
     let tiles = new Array(144);
+    let firstSel = -1;
     let t = 0;
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].onclick = function (e) {
-        // e.target.style.zIndex++;
         let til = tiles[e.target.id];
-        alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
-          + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
+        // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
+        //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
+        if (firstSel == -1) {
+          firstSel = e.target.id;
+          play();
+        } else {
+          let til2 = tiles[firstSel];
+          if (til.type === til2.type) {
+            if ((til.type === "season") || (til.type === "flower")) {
+              til.img.style.visibility = "hidden";
+              til2.img.style.visibility = "hidden";
+              firstSel = -1;
+            } else {
+              til.img.style.visibility = "hidden";
+              til2.img.style.visibility = "hidden";
+              firstSel = -1;
+            }
+          }
+        }
+
       };
+
       if (types.includes(docimgs[i].alt)) {
         tiles[t] = new Tile(docimgs[i], docimgs[i].alt);
         docimgs[i].id = "" + t;
