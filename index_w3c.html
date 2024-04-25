@@ -196,7 +196,10 @@
     <!--img src="images/MJt2-.svg" alt="flower" width="100" height="80"
       style="filter:brightness(70%); position:absolute; top:70px; left:20px"-->
   </div>
-  <audio id="audio" src="images/67.wav"></audio>
+  <audio id="firstsel" src="images/67.wav"></audio>
+  <audio id="selremove" src="images/selRemove.wav"></audio>
+  <audio id="oo" src="images/oo.wav"></audio>
+  <audio id="applause" src="images/APPLAUSE.WAV"></audio>
 
   <p>Display the URL of each img element:</p>
   <p id="demo"></p>
@@ -249,8 +252,8 @@
       }
     }
 
-    function play() {
-      var audio = document.getElementById("audio");
+    function play(audioName) {
+      var audio = document.getElementById(audioName);
       audio.play();
     }
 
@@ -384,15 +387,24 @@
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
         if (firstSel == -1) {
           firstSel = e.target.id;
-          play();
-        } else {
+          // til.img.style.border = "1px solid #a71b1be5";
+          til.img.style.filter = "hue-rotate(220deg)";
+          play("firstsel");
+        } else if (e.target.id = firstSel) {
+          firstSel = -1;
+          til.img.style.filter = "";
+          return;
+        }
+        else {
           let til2 = tiles[firstSel];
           if (til.type === til2.type) {
             if ((til.type === "season") || (til.type === "flower")) {
+              play("selremove");
               til.img.style.visibility = "hidden";
               til2.img.style.visibility = "hidden";
               firstSel = -1;
             } else {
+              play("selremove");
               til.img.style.visibility = "hidden";
               til2.img.style.visibility = "hidden";
               firstSel = -1;
