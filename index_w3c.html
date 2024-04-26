@@ -203,13 +203,13 @@
 
   <p>Display the URL of each img element:</p>
   <p id="demo"></p>
-  <label for="quantity" id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; 
-  left: 900px; top: 30px">Board No:</label>
-  <input type="number" name="boardno" id ="tilnuminput" style="font: 40px 'Brush Script MT', normal; 
-  position:absolute; left: 1050px; top: 30px; width: 180px">
+  <label for="boardno" id="boardnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; 
+  left: 850px; top: 30px">Board No:</label>
+  <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 40px 'Brush Script MT', normal; position:absolute; 
+  left: 1050px; top: 30px; width: 180px; background: transparent" />
   <!--p id ="tilnum" style="font: 20px Arial, sans-serif; position:absolute; left: 900px; top: 50px">tilnum</p-->
-  <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 900px; top: 50px">Tiles:</p>
-  <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1000px; top: 50px">tilnum</p>
+  <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 50px">Tiles:</p>
+  <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 50px">tilnum</p>
 
   <script>
     const layoutPyramid = [
@@ -264,6 +264,18 @@
       audio.play();
     }
 
+    function boardNoEntered(ele) {
+      if (event.key === 'Enter') {
+        ele.blur();
+        resetMjCube();
+        resetZIndex();
+        getGame(ele.value);
+        fillMjCube(layoutPyramid);
+        tilesOnBoard = 144;
+        document.getElementById("tilnum").innerHTML = tilesOnBoard;
+        adjustZIndex();
+      }
+    }
     //--------------------------
 
     //--------------------------
@@ -434,6 +446,7 @@
     resetMjCube();
     resetZIndex();
     getGame(333);
+    document.getElementById("boardno").value = 333;
     fillMjCube(layoutPyramid);
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
