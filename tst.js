@@ -41,19 +41,36 @@ function getGame(gameNo) {
     tiles[i] = i;
   }
   let gen = pseudoRandom(gameNo);
+  let rnd = "";
   for (let i = tiles.length - 1; i > 0; i--) {
-    let j = Math.floor(gen() * (i + 1));
+    let j = Math.floor(gen() * (144));
+    rnd += "," + j;
     let k = tiles[i];
     tiles[i] = tiles[j];
     tiles[j] = k;
   }
+  console.log(rnd);
 }
 
-getGame(9764445);
+getGame(333);
 console.log(tiles.join("\",\""));
-getGame(9998878774464647);
+getGame(334);
 console.log(tiles.join("\",\""));
-getGame(9764445);
+getGame(335);
 console.log(tiles.join("\",\""));
 
 console.log(5 * 25 + 10 + "px");
+
+let max = 5;
+let rands = new Array(max);
+for (let i = 0; i < max; i++) {
+  rands[i] = 0;
+}
+console.log(rands.join(","));
+
+let rgen = pseudoRandom(111);
+for (let i = 0; i < 10000; i++) {
+  let j = Math.floor(rgen() * (max));
+  rands[j]++;
+}
+console.log(rands.join(","));
