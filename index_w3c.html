@@ -247,7 +247,7 @@
     let generator = pseudoRandom(1);
 
     function getGame(gameNo) {
-      for (let i = 0; i < 144; i++) {
+      for (let i = 0; i < tileIds.length; i++) {
         tileIds[i] = i;
       }
       let gen = pseudoRandom(gameNo);
@@ -307,7 +307,7 @@
     }
 
     function resetZIndex() {
-      for (let i = 0; i < 144; i++) {
+      for (let i = 0; i < tiles.length; i++) {
         tiles[i].img.style.zIndex = "unset";
       }
     }
@@ -394,7 +394,9 @@
       tilesOnBoard -= 2;
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
       til.img.style.visibility = "hidden";
+      til.img.style.filter = "";
       til2.img.style.visibility = "hidden";
+      til2.img.style.filter = "";
     }
     // Tile
     //--------------------------
