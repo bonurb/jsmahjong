@@ -390,13 +390,37 @@
       }
     }
 
+    function resetTiles() {
+      for (let i = 0; i < tiles.length; i++) {
+        tiles[i].x = -1;
+        tiles[i].y = -1;
+        tiles[i].z = -1;
+        tiles[i].removed = false;
+      }
+    }
+
+    function doTilesMatch(til, til2) {
+      if (til.type != til2.type) {
+        return false;
+      }
+      if ((til.type === "season") || (til.type === "flower")) {
+        return true;
+      }
+      if (til.img.src === til2.img.src) {
+        return true;
+      }
+      return false;
+    }
+
     function remove(til, til2) {
       tilesOnBoard -= 2;
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
       til.img.style.visibility = "hidden";
       til.img.style.filter = "";
+      til.removed = true;
       til2.img.style.visibility = "hidden";
       til2.img.style.filter = "";
+      til2.removed = true;
     }
     // Tile
     //--------------------------
@@ -423,17 +447,22 @@
         }
         else {
           let til2 = tiles[firstSel];
-          if (til.type === til2.type) {
-            if ((til.type === "season") || (til.type === "flower")) {
-              play("selremove");
-              remove(til, til2);
-              firstSel = -1;
-            } else {
-              play("selremove");
-              remove(til, til2);;
-              firstSel = -1;
-            }
+          if (doTilesMatch(til, til2)) {
+            play("selremove");
+            remove(til, til2);
+            firstSel = -1;
           }
+          // if (til.type === til2.type) {
+          //   if ((til.type === "season") || (til.type === "flower")) {
+          //     play("selremove");
+          //     remove(til, til2);
+          //     firstSel = -1;
+          //   } else {
+          //     play("selremove");
+          //     remove(til, til2);;
+          //     firstSel = -1;
+          //   }
+          // }
         }
 
       };
