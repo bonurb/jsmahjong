@@ -282,7 +282,7 @@
     //--------------------------
     // der Tile Raum: 29 x 15 x 7
     const MAX_X = 29;
-    const MAX_Y = 15;
+    const MAX_Y = 16;
     const MAXLEV = 7;
     const OFFSET = 40;
     const DX = 10;
@@ -419,9 +419,26 @@
       til.img.style.visibility = "hidden";
       til.img.style.filter = "";
       til.removed = true;
+
+      mjCube[til.x][til.y][til.z] = -1;
+      mjCube[til.x + 1][til.y][til.z] = -1;
+      mjCube[til.x][til.y + 1][til.z] = -1;
+      mjCube[til.x + 1][til.y + 1][til.z] = -1;
+      til.x = -1;
+      til.y = -1;
+      til.z = -1;
+
       til2.img.style.visibility = "hidden";
       til2.img.style.filter = "";
       til2.removed = true;
+
+      mjCube[til2.x][til2.y][til2.z] = -1;
+      mjCube[til2.x + 1][til2.y][til2.z] = -1;
+      mjCube[til2.x][til2.y + 1][til2.z] = -1;
+      mjCube[til2.x + 1][til2.y + 1][til2.z] = -1;
+      til2.x = -1;
+      til2.y = -1;
+      til2.z = -1;
     }
     // Tile
     //--------------------------
