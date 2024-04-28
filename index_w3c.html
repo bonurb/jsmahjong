@@ -211,6 +211,7 @@
   <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 50px">Tiles:</p>
   <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 50px">tilnum</p>
 
+  <script src="util.js"></script>
   <script>
     const layoutPyramid = [
       [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
@@ -432,6 +433,7 @@
     let t = 0;
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].onclick = function (e) {
+        // log("in onClick(): " + e.target.id);
         let til = tiles[e.target.id];
         // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
