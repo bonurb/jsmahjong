@@ -281,7 +281,7 @@
 
     //--------------------------
     // der Tile Raum: 29 x 15 x 7
-    const MAX_X = 29;
+    const MAX_X = 30;
     const MAX_Y = 16;
     const MAXLEV = 7;
     const OFFSET = 40;
@@ -389,6 +389,59 @@
         this.z = -1;
         this.removed = false;
       }
+
+      isSelectable() {
+        if (this.x == -1 || this.removed) {
+          return false;
+        }
+        // if ((this.x == 0) || (this.x == MAX_X - 2)) {
+        //   return false;
+        // }
+        // pruefe links und rechts
+        let linksFrei = false;
+        let rechtsFrei = false;
+        // log("x-1,y,z: " + mjCube[this.x - 1][this.y][this.z]);
+        // log("x-1,y+1,z: " + mjCube[this.x - 1][this.y + 1][this.z]);
+        if ((this.x == 0) ||
+          (((this.x > 0) && ((mjCube[this.x - 1][this.y][this.z] == -1)))
+          && ((this.x > 0) && (this.y <= MAX_Y - 2) && (mjCube[this.x - 1][this.y + 1][this.z] == -1)))) {
+          linksFrei = true;
+        }
+
+        // if ((this.x > 0) && (mjCube[this.x - 1][this.y][this.z] == -1)) {
+        //   log("-");
+        // }
+
+        if ((this.x == MAX_X - 2) ||
+          ((mjCube[this.x + 2][this.y][this.z] == -1)
+          && ((this.y <= MAX_Y - 2) && (mjCube[this.x + 2][this.y + 1][this.z] == -1)))) {
+          rechtsFrei = true;
+        }
+        // ganz oben == frei
+        if (this.z == MAXLEV - 1) {
+          return true;
+        }
+        // pruefe z + 1
+        let obenFrei = false;
+        // log(mjCube[this.x][this.y][this.z + 1]);
+        // log(mjCube[this.x + 1][this.y][this.z + 1]);
+        // log(mjCube[this.x][this.y + 1][this.z + 1]);
+        // log(mjCube[this.x + 1][this.y + 1][this.z + 1]);
+        if ((mjCube[this.x][this.y][this.z + 1] == -1)
+          && ((this.x <= MAX_X - 2) && (mjCube[this.x + 1][this.y][this.z + 1] == -1))
+          && ((this.y <= MAX_Y - 2) && (mjCube[this.x][this.y + 1][this.z + 1] == -1))
+          && ((this.x <= MAX_X - 2) && (this.y <= MAX_Y - 2) && (mjCube[this.x + 1][this.y + 1][this.z + 1] == -1))
+        ) {
+          obenFrei = true;
+        }
+        if (linksFrei && obenFrei) {
+          return true;
+        }
+        if (rechtsFrei && obenFrei) {
+          return true;
+        }
+        return false;
+      }
     }
 
     function resetTiles() {
@@ -452,6 +505,9 @@
       docimgs[i].onclick = function (e) {
         // log("in onClick(): " + e.target.id);
         let til = tiles[e.target.id];
+        if (!til.isSelectable()) {
+          return;
+        }
         // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
         if (firstSel == -1) {
