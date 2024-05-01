@@ -210,6 +210,9 @@
   <!--p id ="tilnum" style="font: 20px Arial, sans-serif; position:absolute; left: 900px; top: 50px">tilnum</p-->
   <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 50px">Tiles:</p>
   <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 50px">tilnum</p>
+  <p id="matchnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 90px">Matches:
+  </p>
+  <p id="matchnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 90px">matchnum</p>
 
   <script src="util.js"></script>
   <script>
@@ -280,7 +283,7 @@
     //--------------------------
 
     //--------------------------
-    // der Tile Raum: 29 x 15 x 7
+    // der Tile Raum: 30 x 15 x 7
     const MAX_X = 30;
     const MAX_Y = 16;
     const MAXLEV = 7;
@@ -288,6 +291,8 @@
     const DX = 10;
     const DY = 10;
     let tilesOnBoard = 0;
+    const selectables = new Set();
+    const matches = new Set();
     let mjCube = new Array(MAX_X);
 
     for (let i = 0; i < MAX_X; i++) {
@@ -375,11 +380,44 @@
         }
       }
     }
+
+    function calcMatches() {
+      matches.clear();
+      for (let i = 0; i < selectables.size; i++) {
+        for (let j = i + 1; j < selectables.size; j++) {
+          if (doTilesMatch(tiles[i], tiles[j])) {
+            matches.add(new Match(tiles[i], tiles[j]));
+          }
+        }
+      }
+    }
+
+    function updateBoard() {
+      selectables.clear();
+      for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].isSelectable()) {
+          tiles[i].img.style.filter = "";
+          selectables.add(i);
+        } else {
+          tiles[i].img.style.filter = "brightness(70%)";
+        }
+      }
+      calcMatches();
+      document.getElementById("matchnum").innerHTML = matches.size;
+    }
     // der Tile Raum
     //--------------------------
 
     //--------------------------
     // Tile
+    class Match {
+      constructor(til1, til2) {  // Class constructor
+        this.til1 = til1;
+        this.til2 = til2;
+      }
+
+    }
+
     class Tile {
       constructor(img, type) {  // Class constructor
         this.img = img;
@@ -404,7 +442,7 @@
         // log("x-1,y+1,z: " + mjCube[this.x - 1][this.y + 1][this.z]);
         if ((this.x == 0) ||
           (((this.x > 0) && ((mjCube[this.x - 1][this.y][this.z] == -1)))
-          && ((this.x > 0) && (this.y <= MAX_Y - 2) && (mjCube[this.x - 1][this.y + 1][this.z] == -1)))) {
+            && ((this.x > 0) && (this.y <= MAX_Y - 2) && (mjCube[this.x - 1][this.y + 1][this.z] == -1)))) {
           linksFrei = true;
         }
 
@@ -414,7 +452,7 @@
 
         if ((this.x == MAX_X - 2) ||
           ((mjCube[this.x + 2][this.y][this.z] == -1)
-          && ((this.y <= MAX_Y - 2) && (mjCube[this.x + 2][this.y + 1][this.z] == -1)))) {
+            && ((this.y <= MAX_Y - 2) && (mjCube[this.x + 2][this.y + 1][this.z] == -1)))) {
           rechtsFrei = true;
         }
         // ganz oben == frei
@@ -526,6 +564,7 @@
             play("selremove");
             remove(til, til2);
             firstSel = -1;
+            updateBoard();
           }
           // if (til.type === til2.type) {
           //   if ((til.type === "season") || (til.type === "flower")) {
@@ -557,6 +596,7 @@
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
     adjustZIndex();
+    updateBoard();
 
     // let text = "";
     // for (let i = 0; i < tiles.length; i++) {
