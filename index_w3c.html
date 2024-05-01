@@ -278,6 +278,7 @@
         tilesOnBoard = 144;
         document.getElementById("tilnum").innerHTML = tilesOnBoard;
         adjustZIndex();
+        updateBoard();
       }
     }
     //--------------------------
@@ -383,13 +384,20 @@
 
     function calcMatches() {
       matches.clear();
-      for (let i = 0; i < selectables.size; i++) {
-        for (let j = i + 1; j < selectables.size; j++) {
-          if (doTilesMatch(tiles[i], tiles[j])) {
-            matches.add(new Match(tiles[i], tiles[j]));
+      let sels = new Set();
+      selectables.forEach(function (value) {
+        sels.add(value);
+      });
+      let i1 = -1;
+      let i2 = -1;
+      sels.forEach(function (v1) {
+        sels.forEach(function (v2) {
+          if ((v1 != v2) && doTilesMatch(tiles[v1], tiles[v2])) {
+            matches.add(new Match(tiles[v1], tiles[v2]));
           }
-        }
-      }
+        });
+        sels.delete(v1);
+      });
     }
 
     function updateBoard() {
