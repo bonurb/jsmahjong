@@ -271,6 +271,7 @@
     function boardNoEntered(ele) {
       if (event.key === 'Enter') {
         ele.blur();
+        resetTiles();
         resetMjCube();
         resetZIndex();
         getGame(ele.value);
@@ -294,6 +295,7 @@
     let tilesOnBoard = 0;
     const selectables = new Set();
     const matches = new Set();
+    const undoStack = [];
     let matchIter;
     let mjCube = new Array(MAX_X);
 
@@ -522,6 +524,7 @@
 
     function remove(til, til2) {
       tilesOnBoard -= 2;
+      undoStack.push(new Match(til, til2));
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
       til.img.style.visibility = "hidden";
       til.img.style.filter = "";
@@ -531,9 +534,9 @@
       mjCube[til.x + 1][til.y][til.z] = -1;
       mjCube[til.x][til.y + 1][til.z] = -1;
       mjCube[til.x + 1][til.y + 1][til.z] = -1;
-      til.x = -1;
-      til.y = -1;
-      til.z = -1;
+      // til.x = -1;
+      // til.y = -1;
+      // til.z = -1;
 
       til2.img.style.visibility = "hidden";
       til2.img.style.filter = "";
@@ -543,9 +546,9 @@
       mjCube[til2.x + 1][til2.y][til2.z] = -1;
       mjCube[til2.x][til2.y + 1][til2.z] = -1;
       mjCube[til2.x + 1][til2.y + 1][til2.z] = -1;
-      til2.x = -1;
-      til2.y = -1;
-      til2.z = -1;
+      // til2.x = -1;
+      // til2.y = -1;
+      // til2.z = -1;
     }
     // Tile
     //--------------------------
