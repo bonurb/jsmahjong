@@ -25,20 +25,24 @@
 </svg-->
 
   <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
-    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; position:absolute; left: 110px;">
-    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 242, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgba(0, 0, 0, 0.5)); 
-visibility: visible; position:absolute; left: 60px;">
-    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(252, 241, 146, 0.535); filter:drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.699)); 
-visibility: visible; position:absolute; left: 10px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="left: 110px;">
+    <img src="planar/0101.svg" width="50px" alt="bamboo" style="left: 60px;">
+    <img src="planar/0102.svg" width="50px" alt="bamboo" style="left: 10px;">
 
-    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; position:absolute; top: 70px; left: 110px;">
-    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; position:absolute; top: 66px; left: 114px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="top: 70px; left: 110px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="top: 64px; left: 116px;">
 
   </div>
+  <script>
+    let docimgs = document.images;
 
+    for (let i = 0; i < docimgs.length; i++) {
+      docimgs[i].style.backgroundColor = "rgba(243, 242, 175, 0.904)";
+      docimgs[i].style.filter = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7))";
+      docimgs[i].style.visibility = "visible";
+      docimgs[i].style.position = "absolute";
+    }
+  </script>
 </body>
 
 </html>
