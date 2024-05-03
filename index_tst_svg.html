@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <body>
 
-<h2>Image in a circle and some text</h2>
-<!--svg height="330" width="245" xmlns="http://www.w3.org/2000/svg" style="border-radius: 20px; background-color:rgb(139, 171, 139)">
+  <head>
+    <style>
+      body {
+        background-image: url('images/backgr_stairs-50.jpg');
+      }
+    </style>
+  </head>
+
+  <h2>Image in a circle and some text</h2>
+  <!--svg height="330" width="245" xmlns="http://www.w3.org/2000/svg" style="border-radius: 20px; background-color:rgb(139, 171, 139)">
   <defs>
     <filter id="f3" width="150" height="150">
       <feOffset in="SourceAlpha" dx="-20" dy="20" />
@@ -15,17 +24,21 @@
   <image x="-10" y="0" width="300" height="300" href="planar/spring.svg" filter="url(#f3)"/>
 </svg-->
 
-<img src="planar/spring.svg" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; height:100px; position:absolute; left: 10px;">
-<img src="planar/spring.svg" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgba(0, 0, 0, 0.5)); 
-visibility: visible; height:100px; position:absolute; left: 80px;">
-<img src="planar/spring.svg" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; height:100px; position:absolute; left: 150px;">
+  <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
+visibility: visible; position:absolute; left: 110px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 242, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgba(0, 0, 0, 0.5)); 
+visibility: visible; position:absolute; left: 60px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(252, 241, 146, 0.535); filter:drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.699)); 
+visibility: visible; position:absolute; left: 10px;">
 
-<img src="planar/spring.svg" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; height:100px; position:absolute; top: 165px; left: 150px;">
-<img src="planar/spring.svg" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
-visibility: visible; height:100px; position:absolute; top: 158px; left: 158px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
+visibility: visible; position:absolute; top: 70px; left: 110px;">
+    <img src="planar/spring.svg" width="50px" alt="bamboo" style="background-color:rgba(243, 219, 175, 0.904); filter:drop-shadow(-5px 10px 2px rgb(0 0 0 / 0.5)); 
+visibility: visible; position:absolute; top: 66px; left: 114px;">
+
+  </div>
 
 </body>
+
 </html>
