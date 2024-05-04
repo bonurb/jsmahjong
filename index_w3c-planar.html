@@ -13,7 +13,7 @@
   <!-- Schritte: left: 50; top: 70 -->
 
   <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
-    <img src="planar/0301.svg" alt="bamboo" width="50px">
+    <img src="planar/0301.svg" alt="bamboo" width="50px" style="backgroundColor: rgba(245, 245, 217, 0.904);">
     <img src="planar/0301.svg" alt="bamboo" width="50px">
     <img src="planar/0301.svg" alt="bamboo" width="50px">
     <img src="planar/0301.svg" alt="bamboo" width="50px">
@@ -216,7 +216,7 @@
 
   <script src="util.js"></script>
   <script>
-    const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7));";
+    const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7)) ";
     const layoutPyramid = [
       [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
       [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2], [4, 4], [6, 4],
@@ -286,13 +286,13 @@
     //--------------------------
 
     //--------------------------
-    // der Tile Raum: 30 x 15 x 7
+    // der Tile Raum: 30 x 16 x 7
     const MAX_X = 30;
     const MAX_Y = 16;
     const MAXLEV = 7;
     const OFFSET = 40;
-    const DX = 10;
-    const DY = 10;
+    const DX = 6;
+    const DY = 6;
     let tilesOnBoard = 0;
     const selectables = new Set();
     const matches = new Set();
@@ -353,7 +353,7 @@
     }
 
     function fillMjCube(layout) {
-      for (let lo = 0; lo < 144; lo++) {
+      for (let lo = 0; lo < layout.length; lo++) {
         let lox = layout[lo][0];
         let loy = layout[lo][1];
         let tid = tileIds[lo];
@@ -364,8 +364,8 @@
         tile.y = loy;
         tile.z = z;
         tile.img.style.visibility = "visible";
-        tile.img.style.left = (lox * 23) + OFFSET - (z * DX) + "px";
-        tile.img.style.top = (loy * 29) + OFFSET + (z * DY) + "px";
+        tile.img.style.left = (lox * 22) + OFFSET + (z * DX) + "px";
+        tile.img.style.top = (loy * 32) + OFFSET - (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
       }
     }
@@ -373,8 +373,8 @@
     function adjustZIndex() {
       let zi = 5;
       for (let z = 0; z < MAXLEV; z++) {
-        for (let x = 0; x < MAX_X; x++) {
-          for (let y = MAX_Y - 1; y >= 0; y--) {
+        for (let x = MAX_X - 1; x >= 0; x--) {
+          for (let y = 0; y < MAX_Y; y++) {
             if (mjCube[x][y][z] != -1) {
               let tile = tiles[mjCube[x][y][z]];
               if (tile.img.style.zIndex == "unset") {
@@ -604,7 +604,7 @@
       if (types.includes(docimgs[i].alt)) {
         tiles[t] = new Tile(docimgs[i], docimgs[i].alt);
         docimgs[i].id = "" + t;
-        tiles[t].img.style.backgroundColor = "rgba(243, 242, 175, 0.904)";
+        tiles[t].img.style.backgroundColor = "rgba(245, 245, 217, 0.904";
         tiles[t].img.style.filter = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7))";
         tiles[t].img.style.visibility = "hidden";
         tiles[t].img.style.position = "absolute";
