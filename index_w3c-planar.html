@@ -601,7 +601,7 @@
         }
 
       };
-      
+
       if (types.includes(docimgs[i].alt)) {
         tiles[t] = new Tile(docimgs[i], docimgs[i].alt);
         docimgs[i].id = "" + t;
@@ -634,26 +634,47 @@
 
     // document.getElementById("demo").innerHTML = text;
 
+    //--------------------------
+    // Key Handling
+    let actualMatch;
     document.onkeydown = function (e) {
       // e = e || window.event;
       log(e.key);
-      let m;
+      // let m;
       if (e.key == "h") {
-        m = matchIter.next().value;
-        if (m == undefined) {
-          matchIter = matches.values();
-          m = matchIter.next().value;
+        if (actualMatch != undefined) {
+          return;
         }
-        m.til1.img.style.border = "4px solid rgb(116, 228, 18)";
-        m.til2.img.style.border = "4px solid rgb(116, 228, 18)";
+        actualMatch = matchIter.next().value;
+        if (actualMatch == undefined) {
+          matchIter = matches.values();
+          actualMatch = matchIter.next().value;
+          if (actualMatch == undefined) {
+            return;
+          }
+        }
+        actualMatch.til1.img.style.border = "4px solid rgb(116, 228, 18)";
+        actualMatch.til2.img.style.border = "4px solid rgb(116, 228, 18)";
       }
-      setTimeout(
-        function () {
-          m.til1.img.style.border = "";
-          m.til2.img.style.border = "";
-        }, 3000);
+      // setTimeout(
+      //   function () {
+      //     m.til1.img.style.border = "";
+      //     m.til2.img.style.border = "";
+      //   }, 3000);
 
     };
+
+    document.onkeyup = function (e) {
+      // e = e || window.event;
+      log("keyup: " + e.key);
+      if (e.key == "h") {
+        actualMatch.til1.img.style.border = "";
+        actualMatch.til2.img.style.border = "";
+        actualMatch = undefined;
+      }
+    };
+    // Key Handling
+    //--------------------------
   </script>
 
 </body>
