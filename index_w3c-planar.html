@@ -552,6 +552,40 @@
       // til2.y = -1;
       // til2.z = -1;
     }
+
+    function undo() {
+      let m = undoStack.pop();
+      if (m == undefined) {
+        return;
+      }
+      tilesOnBoard += 2;
+      document.getElementById("tilnum").innerHTML = tilesOnBoard;
+      m.til1.img.style.visibility = "visible";
+      m.til1.img.style.filter = filter1;
+      m.til1.removed = false;
+      let id = m.til1.img.id;
+      let x = m.til1.x;
+      let y = m.til1.y;
+      let z = m.til1.z;
+      mjCube[x][y][z] = id;
+      mjCube[x + 1][y][z] = id;
+      mjCube[x][y + 1][z] = id;
+      mjCube[x + 1][y + 1][z] = id;
+
+      m.til2.img.style.visibility = "visible";
+      m.til2.img.style.filter = filter1;
+      m.til2.removed = false;
+      id = m.til2.img.id;
+      x = m.til2.x;
+      y = m.til2.y;
+      z = m.til2.z;
+      mjCube[x][y][z] = id;
+      mjCube[x + 1][y][z] = id;
+      mjCube[x][y + 1][z] = id;
+      mjCube[x + 1][y + 1][z] = id;
+
+      updateBoard();
+    }
     // Tile
     //--------------------------
 
@@ -662,6 +696,9 @@
       //     m.til2.img.style.border = "";
       //   }, 3000);
 
+      if (e.key == "u") {
+        undo();
+      }
     };
 
     document.onkeyup = function (e) {
