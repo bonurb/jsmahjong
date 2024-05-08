@@ -278,6 +278,7 @@
         resetZIndex();
         getGame(ele.value);
         fillMjCube(layoutPyramid);
+        setTilesVisible();
         tilesOnBoard = 144;
         document.getElementById("tilnum").innerHTML = tilesOnBoard;
         adjustZIndex();
@@ -285,6 +286,11 @@
       }
     }
     //--------------------------
+
+// 
+// Bestimmtes Elem. aus set:
+// Array.from(set)[0]
+// 
 
     //--------------------------
     // der Tile Raum: 30 x 16 x 7
@@ -364,7 +370,6 @@
         tile.x = lox;
         tile.y = loy;
         tile.z = z;
-        tile.img.style.visibility = "visible";
         tile.img.style.left = (lox * 24) + OFFSET + (z * DX) + "px";
         tile.img.style.top = (loy * 35) + OFFSET - (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
@@ -511,6 +516,12 @@
       }
     }
 
+    function setTilesVisible() {
+      for (let i = 0; i < tiles.length; i++) {
+        tiles[i].img.style.visibility = "visible";
+      }
+    }
+
     function doTilesMatch(til, til2) {
       if (til.type != til2.type) {
         return false;
@@ -653,6 +664,7 @@
     getGame(333);
     document.getElementById("boardno").value = 333;
     fillMjCube(layoutPyramid);
+    setTilesVisible();
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
     adjustZIndex();
