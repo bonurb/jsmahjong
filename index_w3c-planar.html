@@ -217,6 +217,7 @@
 
   <script src="util.js"></script>
   <script>
+    let generator = pseudoRandom(1);
     const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7)) ";
     const layoutPyramid = [
       [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
@@ -250,13 +251,12 @@
       }
     }
 
-    let generator = pseudoRandom(1);
 
-    function getGame(gameNo) {
+    function getGame() {
       for (let i = 0; i < tileIds.length; i++) {
         tileIds[i] = i;
       }
-      let gen = pseudoRandom(gameNo);
+      let gen = generator;
       for (let i = tileIds.length - 1; i > 0; i--) {
         let j = Math.floor(gen() * 144);
         let k = tileIds[i];
@@ -276,7 +276,8 @@
         resetTiles();
         resetMjCube();
         resetZIndex();
-        getGame(ele.value);
+        generator = pseudoRandom(ele.value);
+        getGame();
         fillMjCube(layoutPyramid);
         setTilesVisible();
         tilesOnBoard = 144;
@@ -661,7 +662,8 @@
 
     resetMjCube();
     resetZIndex();
-    getGame(333);
+    generator = pseudoRandom(333);
+    getGame();
     document.getElementById("boardno").value = 333;
     fillMjCube(layoutPyramid);
     setTilesVisible();
