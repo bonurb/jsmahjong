@@ -217,7 +217,9 @@
 
   <script src="util.js"></script>
   <script>
+    let gensolvable = true;
     let generator = pseudoRandom(1);
+    const MAXBOARDNUM = 10000000;
     const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7)) ";
     const layoutPyramid = [
       [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
@@ -257,7 +259,7 @@
         tileIds[i] = i;
       }
       let gen = generator;
-      for (let i = tileIds.length - 1; i > 0; i--) {
+      for (let i = tileIds.length - 1; i >= 0; i--) {
         let j = Math.floor(gen() * 144);
         let k = tileIds[i];
         tileIds[i] = tileIds[j];
@@ -277,8 +279,14 @@
         resetMjCube();
         resetZIndex();
         generator = pseudoRandom(ele.value);
-        getGame();
-        fillMjCube(layoutPyramid);
+
+        if (gensolvable) {
+          getSolvableGame(layoutPyramid);
+        } else {
+          getGame();
+          fillMjCube(layoutPyramid, tiles);
+        }
+
         setTilesVisible();
         tilesOnBoard = 144;
         document.getElementById("tilnum").innerHTML = tilesOnBoard;
@@ -288,10 +296,10 @@
     }
     //--------------------------
 
-// 
-// Bestimmtes Elem. aus set:
-// Array.from(set)[0]
-// 
+    // 
+    // Bestimmtes Elem. aus set:
+    // Array.from(set)[0]
+    // 
 
     //--------------------------
     // der Tile Raum: 30 x 16 x 7
@@ -304,7 +312,7 @@
     let tilesOnBoard = 0;
     const selectables = new Set();
     const matches = new Set();
-    const undoStack = [];
+    let undoStack = [];
     let matchIter;
     let mjCube = new Array(MAX_X);
 
@@ -360,7 +368,7 @@
       return z;
     }
 
-    function fillMjCube(layout) {
+    function fillMjCube(layout, tiles) {
       for (let lo = 0; lo < layout.length; lo++) {
         let lox = layout[lo][0];
         let loy = layout[lo][1];
@@ -393,7 +401,7 @@
       }
     }
 
-    function calcMatches() {
+    function calcMatches(tiles) {
       matches.clear();
       let sels = new Set();
       selectables.forEach(function (value) {
@@ -428,7 +436,7 @@
           tiles[i].img.style.filter = filter1 + "brightness(70%)";
         }
       }
-      calcMatches();
+      calcMatches(tiles);
       document.getElementById("matchnum").innerHTML = matches.size;
     }
     // der Tile Raum
@@ -660,12 +668,19 @@
       }
     }
 
+    resetTiles();
     resetMjCube();
     resetZIndex();
-    generator = pseudoRandom(333);
-    getGame();
-    document.getElementById("boardno").value = 333;
-    fillMjCube(layoutPyramid);
+    let bnum = Math.floor(Math.random() * MAXBOARDNUM);
+    generator = pseudoRandom(bnum);
+    document.getElementById("boardno").value = bnum;
+
+    if (gensolvable) {
+      getSolvableGame(layoutPyramid);
+    } else {
+      getGame();
+      fillMjCube(layoutPyramid, tiles);
+    }
     setTilesVisible();
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
