@@ -238,6 +238,8 @@
     //   src: ['images/selRemove.wav']
     // });
 
+    var firstsel = new Audio("images/67.wav");
+
     let gensolvable = true;
     let generator = pseudoRandom(1);
     const MAXBOARDNUM = 10000000;
@@ -657,7 +659,8 @@
         // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
         if (firstSel == -1) {
-          play("firstsel");
+          // play("firstsel");
+          firstsel.play();
           firstSel = e.target.id;
           // til.img.style.border = "1px solid #a71b1be5";
           til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
