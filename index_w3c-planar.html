@@ -208,22 +208,35 @@
     left: 850px; top: 30px">Board No:</label>
   <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 40px 'Brush Script MT', normal; position:absolute; 
     left: 1050px; top: 30px; width: 180px; background: transparent" />
-  <!--p id ="tilnum" style="font: 20px Arial, sans-serif; position:absolute; left: 900px; top: 50px">tilnum</p-->
-  <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 50px">Tiles:</p>
-  <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 50px">tilnum</p>
-  <p id="matchnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 90px">Matches:
+
+  <label style="font: 40px 'Brush Script MT', normal; 
+  position:absolute; left: 850px; top: 90px">
+    Generate solvable Position:
+  </label>
+  <label onclick="slovableClicked(this)" style="font: 40px 'Brush Script MT', normal; 
+  position:absolute; left: 1200px; top: 90px">
+    yes
+  </label>
+
+  <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 350px">Tiles:
   </p>
-  <p id="matchnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 90px">matchnum</p>
+  <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 350px">tilnum</p>
+  <p id="matchnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 390px">
+    Matches:
+  </p>
+  <p id="matchnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 390px">matchnum
+  </p>
 
   <script src="util.js"></script>
-  <script src="howler.core.min.js"></script>
+  <!--script src="howler.core.min.js"></script-->
   <script>
-    var firstsnd = new Howl({
-      src: ['images/67.wav']
-    });
-    var selremsnd = new Howl({
-      src: ['images/selRemove.wav']
-    });
+    // var firstsnd = new Howl({
+    //   src: ['images/67.wav'],
+    //   crossorigin: ["anonymous"]
+    // });
+    // var selremsnd = new Howl({
+    //   src: ['images/selRemove.wav']
+    // });
 
     let gensolvable = true;
     let generator = pseudoRandom(1);
@@ -278,6 +291,18 @@
     function play(audioName) {
       var audio = document.getElementById(audioName);
       audio.play();
+    }
+
+    function slovableClicked(ele) {
+      // log(ele.innerHTML);
+      let solvable = ele.innerHTML;
+      if (solvable == "yes") {
+        ele.innerHTML = "no";
+        gensolvable = false;
+      } else {
+        ele.innerHTML = "yes";
+        gensolvable = true;
+      }
     }
 
     function boardNoEntered(ele) {
@@ -632,11 +657,11 @@
         // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
         if (firstSel == -1) {
+          play("firstsel");
           firstSel = e.target.id;
           // til.img.style.border = "1px solid #a71b1be5";
           til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
-          // play("firstsel");
-          firstsnd.play();
+          // firstsnd.play();
         } else if (e.target.id == firstSel) {
           firstSel = -1;
           til.img.style.filter = filter1;
@@ -645,8 +670,8 @@
         else {
           let til2 = tiles[firstSel];
           if (doTilesMatch(til, til2)) {
-            // play("selremove");
-            selremsnd.play();
+            play("selremove");
+            // selremsnd.play();
             remove(til, til2);
             firstSel = -1;
             updateBoard();
