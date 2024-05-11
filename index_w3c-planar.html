@@ -197,10 +197,10 @@
     <!--img src="images/MJt2-.svg" alt="flower" width="100" height="80"
       style="filter:brightness(70%); position:absolute; top:70px; left:20px"-->
   </div>
-  <audio id="firstsel" src="images/67.wav"></audio>
+  <!--audio id="firstsel" src="images/67.wav"></audio>
   <audio id="selremove" src="images/selRemove.wav"></audio>
   <audio id="oo" src="images/oo.wav"></audio>
-  <audio id="applause" src="images/APPLAUSE.WAV"></audio>
+  <audio id="applause" src="images/APPLAUSE.WAV"></audio-->
 
   <p>Display the URL of each img element:</p>
   <p id="demo"></p>
@@ -228,17 +228,12 @@
   </p>
 
   <script src="util.js"></script>
-  <!--script src="howler.core.min.js"></script-->
   <script>
-    // var firstsnd = new Howl({
-    //   src: ['images/67.wav'],
-    //   crossorigin: ["anonymous"]
-    // });
-    // var selremsnd = new Howl({
-    //   src: ['images/selRemove.wav']
-    // });
 
     var firstsel = new Audio("images/67.wav");
+    var selRemove = new Audio("images/selRemove.wav");
+    var unsel = new Audio("images/77.wav");
+    var applause = new Audio("images/APPLAUSE.wav");
 
     let gensolvable = true;
     let generator = pseudoRandom(1);
@@ -583,6 +578,9 @@
       tilesOnBoard -= 2;
       undoStack.push(new Match(til, til2));
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
+      if (tilesOnBoard == 0) {
+        applause.play();
+      }
       til.img.style.visibility = "hidden";
       til.img.style.filter = filter1;
       til.removed = true;
@@ -666,6 +664,7 @@
           til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
           // firstsnd.play();
         } else if (e.target.id == firstSel) {
+          unsel.play();
           firstSel = -1;
           til.img.style.filter = filter1;
           return;
@@ -673,7 +672,8 @@
         else {
           let til2 = tiles[firstSel];
           if (doTilesMatch(til, til2)) {
-            play("selremove");
+            // play("selremove");
+            selRemove.play();
             // selremsnd.play();
             remove(til, til2);
             firstSel = -1;
