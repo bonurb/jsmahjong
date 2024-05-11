@@ -201,31 +201,32 @@
   <audio id="selremove" src="images/selRemove.wav"></audio>
   <audio id="oo" src="images/oo.wav"></audio>
   <audio id="applause" src="images/APPLAUSE.WAV"></audio-->
-  <label for="boardno" id="boardnumlabel" style="font: 30px 'Brush Script MT', normal; position:absolute; 
-    left: 850px; top: 30px">Board No:</label>
-  <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 30px 'Brush Script MT', normal; position:absolute; 
-    left: 1050px; top: 30px; width: 180px; background: transparent" />
+  <div style="display: flex; justify-content: left; align-items: center; 
+    width: 250px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 30px">
+    <label for="boardno" id="boardnumlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">
+      Board No:</label>
+    <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 30px 
+    'Brush Script MT', normal; background: transparent; border: 0px solid black; width: 120px" />
+  </div>
 
-  <label style="font: 40px 'Brush Script MT', normal; 
-  position:absolute; left: 850px; top: 90px">
-    Generate solvable Position:
-  </label>
-  <label onclick="slovableClicked(this)" style="font: 40px 'Brush Script MT', normal; 
-  position:absolute; left: 1200px; top: 90px">
-    yes
-  </label>
-
-  <div style="display: flex; justify-content: center; align-items: center; 
-  width: 120px; height: 50px; border: 1px solid black; position:absolute; left: 1250px; top: 30px">
-    <p id="tilnumlabel" style="font: 30px 'Brush Script MT', normal;">Tiles:
+  <div style="display: flex; justify-content: left; align-items: center; 
+      width: 120px; height: 40px; border: 1px solid black; position:absolute; left: 1100px; top: 30px">
+    <p id="tilnumlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Tiles:
     </p>
     <p id="tilnum" style="font: 30px 'Brush Script MT', normal;">tilnum</p>
   </div>
-  <p id="matchnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 390px">
-    Matches:
-  </p>
-  <p id="matchnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 390px">matchnum
-  </p>
+
+  <div style="display: flex; justify-content: left; align-items: center; 
+      width: 320px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 90px">
+    <label style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Generate solvable Position:</label>
+    <label onclick="slovableClicked(this)" style="font: 30px 'Brush Script MT', normal;">yes</label>
+  </div>
+
+  <div style="display: flex; justify-content: left; align-items: center; 
+      width: 320px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 150px">
+    <p id="matchnumlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Matches:</p>
+    <p id="matchnum" style="font: 30px 'Brush Script MT', normal;">matchnum</p>
+  </div>
 
   <script src="util.js"></script>
   <script>
@@ -642,6 +643,9 @@
     // Tile
     //--------------------------
 
+    function playfsel() {
+      firstsel.play();
+    }
 
     let docimgs = document.images;
     let tiles = new Array(144);
@@ -650,6 +654,7 @@
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].onclick = function (e) {
         // log("in onClick(): " + e.target.id);
+        unsel.removeEventListener("ended", playfsel);
         let til = tiles[e.target.id];
         if (!til.isSelectable()) {
           return;
@@ -678,6 +683,12 @@
             remove(til, til2);
             firstSel = -1;
             updateBoard();
+          } else {
+            unsel.play();
+            unsel.addEventListener("ended", playfsel);
+            firstSel = e.target.id;
+            til2.img.style.filter = filter1;
+            til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
           }
           // if (til.type === til2.type) {
           //   if ((til.type === "season") || (til.type === "flower")) {
