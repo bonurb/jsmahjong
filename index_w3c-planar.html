@@ -12,7 +12,7 @@
 <body>
   <!-- Schritte: left: 50; top: 70 -->
 
-  <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
+  <div style="width: 1400px; height: 630px; position:relative; top:20px; left:20px; border: 1px solid black;">
     <!--img src="planar/0301.svg" alt="bamboo" style="backgroundColor: rgba(245, 245, 217, 0.904);"-->
     <img src="planar/0301.svg" alt="bamboo">
     <img src="planar/0301.svg" alt="bamboo">
@@ -201,12 +201,9 @@
   <audio id="selremove" src="images/selRemove.wav"></audio>
   <audio id="oo" src="images/oo.wav"></audio>
   <audio id="applause" src="images/APPLAUSE.WAV"></audio-->
-
-  <p>Display the URL of each img element:</p>
-  <p id="demo"></p>
-  <label for="boardno" id="boardnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; 
+  <label for="boardno" id="boardnumlabel" style="font: 30px 'Brush Script MT', normal; position:absolute; 
     left: 850px; top: 30px">Board No:</label>
-  <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 40px 'Brush Script MT', normal; position:absolute; 
+  <input type="number" name="boardno" id="boardno" onkeydown="boardNoEntered(this)" style="font: 30px 'Brush Script MT', normal; position:absolute; 
     left: 1050px; top: 30px; width: 180px; background: transparent" />
 
   <label style="font: 40px 'Brush Script MT', normal; 
@@ -218,9 +215,12 @@
     yes
   </label>
 
-  <p id="tilnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 350px">Tiles:
-  </p>
-  <p id="tilnum" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 1050px; top: 350px">tilnum</p>
+  <div style="display: flex; justify-content: center; align-items: center; 
+  width: 120px; height: 50px; border: 1px solid black; position:absolute; left: 1250px; top: 30px">
+    <p id="tilnumlabel" style="font: 30px 'Brush Script MT', normal;">Tiles:
+    </p>
+    <p id="tilnum" style="font: 30px 'Brush Script MT', normal;">tilnum</p>
+  </div>
   <p id="matchnumlabel" style="font: 40px 'Brush Script MT', normal; position:absolute; left: 850px; top: 390px">
     Matches:
   </p>
