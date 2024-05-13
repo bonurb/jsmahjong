@@ -11,7 +11,6 @@
     </style>
   </head>
 
-  <h2>Image in a circle and some text</h2>
   <!--svg height="330" width="245" xmlns="http://www.w3.org/2000/svg" style="border-radius: 20px; background-color:rgb(139, 171, 139)">
   <defs>
     <filter id="f3" width="150" height="150">
@@ -25,24 +24,245 @@
 </svg-->
 
   <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
-    <img src="planar/spring.svg" alt="bamboo" draggable="false" style="left: 110px;">
-    <img src="planar/0101.svg" alt="bamboo" draggable="false" style="left: 60px;">
-    <img src="planar/0102.svg" alt="bamboo" draggable="false" style="left: 10px;">
+    <img src="planar/spring.svg" alt="bamboo">
+    <img src="planar/0101.svg" alt="bamboo">
+    <!--img src="planar/0102.svg" alt="bamboo">
 
-    <img src="planar/spring.svg" alt="bamboo" draggable="false" style="top: 70px; left: 110px;">
-    <img src="planar/spring.svg" alt="bamboo" style="top: 64px; left: 116px;">
+    <img src="planar/spring.svg" alt="bamboo">
+    <img src="planar/spring.svg" alt="bamboo"-->
 
   </div>
+  
+  <div style="display: flex; justify-content: left; align-items: center; 
+      width: 120px; height: 40px; border: 1px solid black; position:absolute; left: 1100px; top: 30px">
+    <p id="tilnumlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Tiles:
+    </p>
+    <p id="tilnum" style="font: 30px 'Brush Script MT', normal;">tilnum</p>
+  </div>
+
   <script>
+    const layout = [
+      [2, 0],
+      [4, 0], [6, 0], [8, 0], [3, 1]];
+    // [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
+    // [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2], [4, 4], [6, 4],
+    //   [8, 4], [10, 4], [12, 4], [14, 4], [16, 4], [18, 4], [20, 4], [22, 4], [2, 6], [4, 6], [6, 6],
+    //   [8, 6], [10, 6], [12, 6], [14, 6], [16, 6], [18, 6], [20, 6], [22, 6], [24, 6], [0, 7], [26, 7],
+    //   [28, 7], [2, 8], [4, 8], [6, 8], [8, 8], [10, 8], [12, 8], [14, 8], [16, 8], [18, 8], [20, 8],
+    //   [22, 8], [24, 8], [4, 10], [6, 10], [8, 10], [10, 10], [12, 10], [14, 10], [16, 10], [18, 10],
+    //   [20, 10], [22, 10], [6, 12], [8, 12], [10, 12], [12, 12], [14, 12], [16, 12], [18, 12],
+    //   [20, 12], [2, 14], [4, 14], [6, 14], [8, 14], [10, 14], [12, 14], [14, 14], [16, 14],
+    //   [18, 14], [20, 14], [22, 14], [24, 14], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2],
+    //   [8, 4], [10, 4], [12, 4], [14, 4], [16, 4], [18, 4], [8, 6], [10, 6], [12, 6], [14, 6], [16, 6],
+    //   [18, 6], [8, 8], [10, 8], [12, 8], [14, 8], [16, 8], [18, 8], [8, 10], [10, 10], [12, 10],
+    //   [14, 10], [16, 10], [18, 10], [8, 12], [10, 12], [12, 12], [14, 12], [16, 12], [18, 12],
+    //   [10, 4], [12, 4], [14, 4], [16, 4], [10, 6], [12, 6], [14, 6], [16, 6], [10, 8], [12, 8],
+    //   [14, 8], [16, 8], [10, 10], [12, 10], [14, 10], [16, 10], [12, 6], [14, 6], [12, 8], [14, 8],
+    //   [13, 7]
+    // ];
+    const types = ["circle", "bamboo", "character", "wind", "dragon", "season", "flower"];
+
+    //--------------------------
+    // der Tile Raum: 30 x 16 x 7
+    const MAX_X = 30;
+    const MAX_Y = 16;
+    const MAXLEV = 7;
+    const OFFSET = 40;
+    const DX = 6;
+    const DY = 6;
+    let tilesOnBoard = 0;
+    const selectables = new Set();
+    const matches = new Set();
+    let undoStack = [];
+    let matchIter;
+    let mjCube = new Array(MAX_X);
+
+    let tileIds = new Array(144);
+    for (let i = 0; i < 144; i++) {
+      tileIds[i] = i;
+    }
+
+    for (let i = 0; i < MAX_X; i++) {
+      mjCube[i] = new Array(MAX_Y);
+      for (let j = 0; j < MAX_Y; j++) {
+        mjCube[i][j] = new Array(MAXLEV);
+      }
+    }
+
+    function resetMjCube() {
+      for (let x = 0; x < MAX_X; x++) {
+        for (let y = 0; y < MAX_Y; y++) {
+          for (let z = 0; z < MAXLEV; z++) {
+            mjCube[x][y][z] = "-1";
+          }
+        }
+      }
+    }
+
+    function resetZIndex() {
+      for (let i = 0; i < tiles.length; i++) {
+        tiles[i].img.style.zIndex = "unset";
+      }
+    }
+
+    function dropTile(x, y, tileId) {
+      let z = 0;
+      let xp = x + 1;
+      let yp = y + 1;
+      if (xp == MAX_X) {
+        xp = x;
+      }
+      if (yp == MAX_Y) {
+        yp = y;
+      }
+
+      for (let i = 0; i < MAXLEV; i++) {
+        if ((mjCube[x][y][z] == -1) && (mjCube[xp][y][z] == -1)
+          && (mjCube[x][yp][z] == -1) && (mjCube[xp][yp][z] == -1)) {
+          break;
+        }
+        z++;
+        if (z == MAXLEV) {
+          return -1;
+        }
+      }
+      mjCube[x][y][z] = tileId;
+      mjCube[xp][y][z] = tileId;
+      mjCube[x][yp][z] = tileId;
+      mjCube[xp][yp][z] = tileId;
+
+      return z;
+    }
+
+    function fillMjCube(layout, tiles) {
+      for (let lo = 0; lo < layout.length; lo++) {
+        let lox = layout[lo][0];
+        let loy = layout[lo][1];
+        let tid = tileIds[lo];
+        let tile = tiles[tid];
+
+        let z = dropTile(lox, loy, tid);
+        tile.x = lox;
+        tile.y = loy;
+        tile.z = z;
+        tile.img.style.left = (lox * 24) + OFFSET + (z * DX) + "px";
+        tile.img.style.top = (loy * 35) + OFFSET - (z * DY) + "px";
+        // tile.img.setAttribute("data-ix", "my data: " + lox);
+      }
+    }
+
+    function adjustZIndex() {
+      let zi = 5;
+      for (let z = 0; z < MAXLEV; z++) {
+        for (let x = MAX_X - 1; x >= 0; x--) {
+          for (let y = 0; y < MAX_Y; y++) {
+            if (mjCube[x][y][z] != -1) {
+              let tile = tiles[mjCube[x][y][z]];
+              if (tile.img.style.zIndex == "unset") {
+                tile.img.style.zIndex = zi++;
+              }
+            }
+          }
+        }
+      }
+    }
+    //--------------------------
+    //--------------------------
+    // Tile
+    class Match {
+      constructor(til1, til2) {  // Class constructor
+        this.til1 = til1;
+        this.til2 = til2;
+      }
+
+    }
+
+    class Tile {
+      constructor(img, type) {  // Class constructor
+        this.img = img;
+        this.type = type;
+        this.x = -1;
+        this.y = -1;
+        this.z = -1;
+        this.removed = false;
+      }
+    }
+
+    function resetTiles() {
+      for (let i = 0; i < tiles.length; i++) {
+        tiles[i].x = -1;
+        tiles[i].y = -1;
+        tiles[i].z = -1;
+        tiles[i].removed = false;
+      }
+    }
+
+    function setTilesVisible() {
+      // for (let i = 0; i < tiles.length; i++) {
+      //   tiles[i].img.style.visibility = "visible";
+      // }
+      for (let z = 0; z < MAXLEV; z++) {
+        for (let x = MAX_X - 1; x >= 0; x--) {
+          for (let y = 0; y < MAX_Y; y++) {
+            if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
+              let tile = tiles[mjCube[x][y][z]];
+              tile.img.style.visibility = "visible";
+              tilesOnBoard++;
+            }
+          }
+        }
+      }
+      document.getElementById("tilnum").innerHTML = tilesOnBoard;
+    }
+    // Tile
+    //--------------------------
+
     let docimgs = document.images;
 
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].style.backgroundColor = "rgba(243, 242, 175, 0.904)";
       docimgs[i].style.filter = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7))";
-      docimgs[i].style.visibility = "visible";
+      docimgs[i].style.visibility = "hidden";
       docimgs[i].style.position = "absolute";
       docimgs[i].style.width = "60px";
     }
+
+    let tiles = new Array();
+    let t = 0;
+    for (let i = 0; i < 144; i++) {
+      let di = Math.floor(Math.random() * docimgs.length);
+      let diimg = docimgs[di].cloneNode(true);
+      docimgs[di].parentNode.appendChild(diimg);
+      let ditile = new Tile(diimg, diimg.alt);
+
+      docimgs[i].onclick = function (e) {
+        console.log("in onClick(): " + e.target.id);
+        //   let til = tiles[e.target.id];
+        //   // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
+        //   //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
+
+      };
+
+      if (types.includes(diimg.alt)) {
+        tiles.push(ditile);
+        ditile.img.id = "" + t;
+        ditile.img.style.backgroundColor = "rgba(245, 245, 217, 0.904";
+        ditile.img.style.filter = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7))";
+        ditile.img.style.visibility = "hidden";
+        ditile.img.style.position = "absolute";
+        ditile.img.style.width = "50px";
+        ditile.img.setAttribute("draggable", false);
+        t++;
+      }
+    }
+
+    resetTiles();
+    resetMjCube();
+    resetZIndex();
+
+    fillMjCube(layout, tiles);
+    adjustZIndex();
+    setTilesVisible();
   </script>
 </body>
 
