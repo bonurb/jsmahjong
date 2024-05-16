@@ -161,6 +161,7 @@
     }
 
     function resetMjCube() {
+      tilesOnBoard = 0;
       for (let x = 0; x < MAX_X; x++) {
         for (let y = 0; y < MAX_Y; y++) {
           for (let z = 0; z < MAXLEV; z++) {
@@ -270,6 +271,7 @@
         tiles[i].y = -1;
         tiles[i].z = -1;
         tiles[i].removed = false;
+        tiles[i].img.style.visibility = "hidden";
       }
     }
 
