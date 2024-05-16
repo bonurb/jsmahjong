@@ -233,13 +233,74 @@
     <p id="layoutlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:</p>
     <select id="layoutlist" onchange="layoutSelected(this)" style="font: 30px 'Brush Script MT', normal; background: transparent;
     border: 0px solid black; width: 150px">
-      <option value="1">Pyramid</option>
-      <option value="2">otherlayout</option>
     </select>
   </div>
 
   <script src="util.js"></script>
   <script>
+    const jsonlayouts = '['
+      + '{"id":"2175883231","name":"Turtle","map":[[0,[[0,[[2,12]]],[2,[[6,8]]],[4,[[4,10]]],[6,[[2,12]]],[7,[0,[26,2]]],[8,[[2,12]]],[10,[[4,10]]],[12,[[6,8]]],[14,[[2,12]]]]],[1,[[2,[[8,6]]],[4,[[8,6]]],[6,[[8,6]]],[8,[[8,6]]],[10,[[8,6]]],[12,[[8,6]]]]],[2,[[4,[[10,4]]],[6,[[10,4]]],[8,[[10,4]]],[10,[[10,4]]]]],[3,[[6,[[12,2]]],[8,[[12,2]]]]],[4,[[7,13]]]]},'
+      + '{"id":"1830783848","name":"Fly","map":[[0,[[0,[[1,4],[19,4]]],[2,[[1,4],[12,2],[19,4]]],[4,[[5,9]]],[6,[[0,2],[9,5],[24,2]]],[8,[0,[8,6],26]],[10,[[4,10]]],[12,[[0,4],[10,4],[20,4]]],[14,[[0,4],[11,3],[20,4]]]]],[1,[[0,[[3,3],[19,3]]],[2,[[3,3],[12,2],[19,3]]],[4,[7,19]],[6,[[0,2],[11,3],[24,2]]],[8,[0,[10,4],26]],[10,[[8,6]]],[12,[[2,3],[20,3]]],[14,[[2,3],[11,3],[20,3]]]]],[2,[[1,[[4,2],[20,2]]],[2,13],[6,13],[8,[[12,2]]],[10,[[12,2]]],[13,[[3,2],[21,2]]],[14,13]]],[3,[[8,13],[10,13]]]]},'
+      + '{"id":"3955482880","name":"Dragon","map":[[0,[[0,[[6,2]]],[1,[[10,2],20]],[2,[[4,3],26]],[3,[1,12,[18,2],24,28]],[5,[[0,2],[10,2],[17,2],24,28]],[6,[4,22]],[7,[1,6,[9,2],[16,3],28]],[8,14],[9,[[6,4],[16,3],27]],[10,[3,14,22]],[11,[[6,4],18]],[12,[[2,2],[22,2]]],[13,18],[14,[3,[14,2],[24,2]]]]],[1,[[0,[[6,2]]],[1,[[10,2]]],[2,[[4,3],26]],[3,[1,12,19,24,28]],[5,[[0,2],[10,2],[17,2],24,28]],[6,22],[7,[1,6,[9,2],[16,3],28]],[8,14],[9,[[6,4],[16,3],27]],[10,[3,14,22]],[11,[[8,3],18]],[12,[[2,2],[22,2]]],[13,18],[14,[3,15,25]]]],[2,[[0,7],[1,[[9,2]]],[2,[[5,2]]],[3,12],[4,[1,24,28]],[5,[11,18]],[6,[1,28]],[7,[10,[17,2]]],[9,[[9,2],14,[17,2]]],[11,[3,[9,2]]],[13,3]]],[3,[[1,7],[7,18],[9,[10,18]],[11,10]]]]},'
+      + '{"id":"709938609","name":"Arena","map":[[0,[[0,[[0,5],[16,5]]],[2,[[0,4],[10,3],[18,4]]],[4,[[0,3],12,[20,3]]],[6,[[0,2],[10,3],[22,2]]],[8,[[0,3],12,[20,3]]],[10,[[0,4],[10,3],[18,4]]],[12,[[0,5],[16,5]]]]],[1,[[0,[[0,4],[18,4]]],[2,[[0,3],[20,3]]],[3,12],[4,[[0,2],[22,2]]],[6,[0,12,24]],[8,[[0,2],[22,2]]],[9,12],[10,[[0,3],[20,3]]],[12,[[0,4],[18,4]]]]],[2,[[0,[[0,3],[20,3]]],[2,[[0,2],[22,2]]],[4,[0,24]],[8,[0,24]],[10,[[0,2],[22,2]]],[12,[[0,3],[20,3]]]]],[3,[[0,[[0,2],[22,2]]],[2,[0,24]],[10,[0,24]],[12,[[0,2],[22,2]]]]],[4,[[0,[0,24]],[12,[0,24]]]]]},'
+      + '{"id":"4277830847","name":"Bridge","map":[[0,[[0,[[0,5],12,[16,5]]],[2,[[0,4],[10,3],[18,4]]],[4,[[0,3],[8,5],[20,3]]],[6,[[0,2],[6,7],[22,2]]],[8,[[0,3],[8,5],[20,3]]],[10,[[0,4],[10,3],[18,4]]],[12,[[0,5],12,[16,5]]]]],[1,[[0,[[0,4],[18,4]]],[2,[[0,3],12,[20,3]]],[4,[[0,2],[10,3],[22,2]]],[6,[0,12,24]],[8,[[0,2],[10,3],[22,2]]],[10,[[0,3],12,[20,3]]],[12,[[0,4],[18,4]]]]],[2,[[0,[[2,2],[20,2]]],[2,[[0,2],[22,2]]],[4,[0,24]],[8,[0,24]],[10,[[0,2],[22,2]]],[12,[[2,2],[20,2]]]]]]},'
+      + '{"id":"588942537","name":"Kitty","map":[[0,[[0,6],[1,4],[2,2],[4,[0,[6,6],27]],[5,18],[6,[0,[4,7],[24,4]]],[7,[[18,2]]],[8,[[2,8],[24,5]]],[9,[[18,2]]],[10,[[2,8],[24,5]]],[11,[[18,2]]],[12,[[2,8],[24,5]]],[13,[18,22]],[14,[[4,7],[24,4]]],[16,[5,15]]]],[1,[[0,6],[1,4],[2,2],[4,[0,27]],[6,[0,[6,6]]],[8,[[4,7],[26,2]]],[9,18],[10,[[4,7],[24,4]]],[12,[[6,6],[26,2]]],[16,[5,15]]]],[2,[[8,[[8,5]]],[9,[[26,2]]],[10,[[8,5]]],[11,[[26,2]]]]],[3,[[9,[[10,3]]]]]]},'
+      + '{"id":"3878481316","name":"Monkey","map":[[0,[[0,[[0,4],[18,2],28]],[2,[0,[6,3],[16,2],[26,2]]],[4,[[0,2],[10,4],26]],[6,[[8,7],26]],[7,6],[8,[[8,5],[20,2],26]],[10,[[0,2],10,14,22,26]],[12,[2,[8,2],14,18,[22,3]]],[14,[[2,4],[14,3]]]]],[1,[[0,[[2,2]]],[1,[0,6,18,28]],[2,[[8,2],16]],[3,[0,26]],[4,[[10,4]]],[5,26],[6,[[8,6]]],[7,[20,26]],[8,[[8,5]]],[9,[22,26]],[10,10],[11,[2,14,22,26]],[12,[10,24]],[13,[2,8]],[14,[[4,2],[15,2]]]]],[2,[[0,3],[2,0],[4,[[10,4],26]],[6,[[9,5],26]],[8,[[10,4],26]],[10,[22,26]],[12,2],[14,[5,16]]]],[3,[[4,[[10,4]]],[5,26],[6,[[10,4]]],[7,26],[8,[[10,4]]],[9,26]]],[4,[[6,26],[8,26]]]]}'
+      + ']';
+    const obj = JSON.parse(jsonlayouts);
+    let actLayout = expandMapping(obj[0].map);
+    let lolist = document.getElementById("layoutlist");
+
+    for (let i = 0; i < obj.length; i++) {
+      var option = document.createElement("option");
+      option.text = obj[i].name;
+      option.value = i;
+      lolist.add(option);
+    }
+
+    function expandMapping(map) {
+      const result = [];
+      map.forEach(matrix => {
+        const z = matrix[0];
+        const rows = matrix[1];
+        rows.forEach(row => {
+          const y = row[0];
+          const cells = row[1];
+          if (!Array.isArray(cells)) {
+            result.push([z, cells, y]);
+          } else {
+            cells.forEach(cell => {
+              if (Array.isArray(cell)) {
+                let x = cell[0];
+                const count = cell[1];
+                for (let i = 0; i < count; i++) {
+                  result.push([z, x, y]);
+                  x += 2;
+                }
+              } else {
+                result.push([z, cell, y]);
+              }
+            });
+          }
+        });
+      });
+      return result;
+    }
+
+    function layoutSelected(ele) {
+      console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
+      resetTiles();
+      resetMjCube();
+      resetZIndex();
+
+      console.log(obj[ele.value].name);
+      actLayout = expandMapping(obj[ele.value].map);
+      fillMjCube(actLayout, tiles);
+      // adjustZIndex();
+      setTilesVisible();
+    }
+
+    // parse map: https://github.com/ffalt/mah/blob/main/src/app/model/mapping.ts
 
     var firstsel = new Audio("images/67.wav");
     var selRemove = new Audio("images/selRemove.wav");
@@ -250,23 +311,6 @@
     let generator = pseudoRandom(1);
     const MAXBOARDNUM = 10000000;
     const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7)) ";
-    const layoutPyramid = [
-      [2, 0], [4, 0], [6, 0], [8, 0], [10, 0], [12, 0], [14, 0], [16, 0], [18, 0], [20, 0], [22, 0],
-      [24, 0], [6, 2], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2], [20, 2], [4, 4], [6, 4],
-      [8, 4], [10, 4], [12, 4], [14, 4], [16, 4], [18, 4], [20, 4], [22, 4], [2, 6], [4, 6], [6, 6],
-      [8, 6], [10, 6], [12, 6], [14, 6], [16, 6], [18, 6], [20, 6], [22, 6], [24, 6], [0, 7], [26, 7],
-      [28, 7], [2, 8], [4, 8], [6, 8], [8, 8], [10, 8], [12, 8], [14, 8], [16, 8], [18, 8], [20, 8],
-      [22, 8], [24, 8], [4, 10], [6, 10], [8, 10], [10, 10], [12, 10], [14, 10], [16, 10], [18, 10],
-      [20, 10], [22, 10], [6, 12], [8, 12], [10, 12], [12, 12], [14, 12], [16, 12], [18, 12],
-      [20, 12], [2, 14], [4, 14], [6, 14], [8, 14], [10, 14], [12, 14], [14, 14], [16, 14],
-      [18, 14], [20, 14], [22, 14], [24, 14], [8, 2], [10, 2], [12, 2], [14, 2], [16, 2], [18, 2],
-      [8, 4], [10, 4], [12, 4], [14, 4], [16, 4], [18, 4], [8, 6], [10, 6], [12, 6], [14, 6], [16, 6],
-      [18, 6], [8, 8], [10, 8], [12, 8], [14, 8], [16, 8], [18, 8], [8, 10], [10, 10], [12, 10],
-      [14, 10], [16, 10], [18, 10], [8, 12], [10, 12], [12, 12], [14, 12], [16, 12], [18, 12],
-      [10, 4], [12, 4], [14, 4], [16, 4], [10, 6], [12, 6], [14, 6], [16, 6], [10, 8], [12, 8],
-      [14, 8], [16, 8], [10, 10], [12, 10], [14, 10], [16, 10], [12, 6], [14, 6], [12, 8], [14, 8],
-      [13, 7]
-    ];
     const types = ["circle", "bamboo", "character", "wind", "dragon", "season", "flower"];
     let tileIds = new Array(144);
     for (let i = 0; i < 144; i++) {
@@ -281,7 +325,6 @@
         return (value - 1) / 2147483647;
       }
     }
-
 
     function getGame() {
       for (let i = 0; i < tileIds.length; i++) {
@@ -299,10 +342,6 @@
     function play(audioName) {
       var audio = document.getElementById(audioName);
       audio.play();
-    }
-
-    function layoutSelected(ele) {
-      log(ele.value + ", " + ele.options[ele.selectedIndex].text)
     }
 
     function slovableClicked(ele) {
@@ -326,16 +365,15 @@
         generator = pseudoRandom(ele.value);
 
         if (gensolvable) {
-          getSolvableGame(layoutPyramid);
+          getSolvableGame(actLayout);
         } else {
           getGame();
-          fillMjCube(layoutPyramid, tiles);
+          fillMjCube(actLayout, tiles);
         }
 
         setTilesVisible();
         tilesOnBoard = 144;
         document.getElementById("tilnum").innerHTML = tilesOnBoard;
-        adjustZIndex();
         updateBoard();
       }
     }
@@ -347,9 +385,9 @@
     // 
 
     //--------------------------
-    // der Tile Raum: 30 x 16 x 7
-    const MAX_X = 30;
-    const MAX_Y = 16;
+    // der Tile Raum: 34 x 18 x 7
+    const MAX_X = 34;
+    const MAX_Y = 18;
     const MAXLEV = 7;
     const OFFSET = 40;
     const DX = 6;
@@ -384,65 +422,25 @@
       }
     }
 
-    function dropTile(x, y, tileId) {
-      let z = 0;
-      let xp = x + 1;
-      let yp = y + 1;
-      if (xp == MAX_X) {
-        xp = x;
-      }
-      if (yp == MAX_Y) {
-        yp = y;
-      }
-
-      for (let i = 0; i < MAXLEV; i++) {
-        if ((mjCube[x][y][z] == -1) && (mjCube[xp][y][z] == -1)
-          && (mjCube[x][yp][z] == -1) && (mjCube[xp][yp][z] == -1)) {
-          break;
-        }
-        z++;
-        if (z == MAXLEV) {
-          return -1;
-        }
-      }
-      mjCube[x][y][z] = tileId;
-      mjCube[xp][y][z] = tileId;
-      mjCube[x][yp][z] = tileId;
-      mjCube[xp][yp][z] = tileId;
-
-      return z;
-    }
-
     function fillMjCube(layout, tiles) {
       for (let lo = 0; lo < layout.length; lo++) {
-        let lox = layout[lo][0];
-        let loy = layout[lo][1];
+        let x = layout[lo][1];
+        let y = layout[lo][2];
         let tid = tileIds[lo];
         let tile = tiles[tid];
 
-        let z = dropTile(lox, loy, tid);
-        tile.x = lox;
-        tile.y = loy;
+        let z = layout[lo][0];
+        tile.x = x;
+        tile.y = y;
         tile.z = z;
-        tile.img.style.left = (lox * 24) + OFFSET + (z * DX) + "px";
-        tile.img.style.top = (loy * 35) + OFFSET - (z * DY) + "px";
+        tile.img.style.left = (x * 24) + OFFSET + (z * DX) + "px";
+        tile.img.style.top = (y * 35) + OFFSET - (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
-      }
-    }
 
-    function adjustZIndex() {
-      let zi = 5;
-      for (let z = 0; z < MAXLEV; z++) {
-        for (let x = MAX_X - 1; x >= 0; x--) {
-          for (let y = 0; y < MAX_Y; y++) {
-            if (mjCube[x][y][z] != -1) {
-              let tile = tiles[mjCube[x][y][z]];
-              if (tile.img.style.zIndex == "unset") {
-                tile.img.style.zIndex = zi++;
-              }
-            }
-          }
-        }
+        mjCube[x][y][z] = tid;
+        mjCube[x + 1][y][z] = tid;
+        mjCube[x][y + 1][z] = tid;
+        mjCube[x +1][y +1][z] = tid;
       }
     }
 
@@ -567,13 +565,28 @@
         tiles[i].y = -1;
         tiles[i].z = -1;
         tiles[i].removed = false;
+        tiles[i].img.style.visibility = "hidden";
       }
     }
 
     function setTilesVisible() {
-      for (let i = 0; i < tiles.length; i++) {
-        tiles[i].img.style.visibility = "visible";
+      let zi = 5;
+      tilesOnBoard = 0;
+      for (let z = 0; z < MAXLEV; z++) {
+        zi += 1;
+        for (let x = MAX_X - 1; x >= 0; x--) {
+          zi += 1;
+          for (let y = 0; y < MAX_Y; y++) {
+            if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
+              let tile = tiles[mjCube[x][y][z]];
+              tile.img.style.visibility = "visible";
+              tilesOnBoard++;
+              tile.img.style.zIndex = zi;
+            }
+          }
+        }
       }
+      document.getElementById("tilnum").innerHTML = tilesOnBoard;
     }
 
     function doTilesMatch(til, til2) {
@@ -740,15 +753,14 @@
     document.getElementById("boardno").value = bnum;
 
     if (gensolvable) {
-      getSolvableGame(layoutPyramid);
+      getSolvableGame(actLayout);
     } else {
       getGame();
-      fillMjCube(layoutPyramid, tiles);
+      fillMjCube(actLayout, tiles);
     }
     setTilesVisible();
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
-    adjustZIndex();
     updateBoard();
 
     // let text = "";
