@@ -78,7 +78,7 @@
       console.log(obj[ele.value].name);
       let loexp = expandMapping(obj[ele.value].map);
       fillMjCube(loexp, tiles);
-      adjustZIndex();
+      // adjustZIndex();
       setTilesVisible();
     }
 
@@ -279,13 +279,17 @@
       // for (let i = 0; i < tiles.length; i++) {
       //   tiles[i].img.style.visibility = "visible";
       // }
+      let zi = 5;
       for (let z = 0; z < MAXLEV; z++) {
+        zi += 1;
         for (let x = MAX_X - 1; x >= 0; x--) {
+          zi += 1;
           for (let y = 0; y < MAX_Y; y++) {
             if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
               let tile = tiles[mjCube[x][y][z]];
               tile.img.style.visibility = "visible";
               tilesOnBoard++;
+              tile.img.style.zIndex = zi;
             }
           }
         }
@@ -341,7 +345,7 @@
     console.log(obj[0].name);
     let loexp = expandMapping(obj[0].map);
     fillMjCube(loexp, tiles);
-    adjustZIndex();
+    // adjustZIndex();
     setTilesVisible();
   </script>
 </body>
