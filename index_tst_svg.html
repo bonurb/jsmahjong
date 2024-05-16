@@ -113,18 +113,18 @@
           const y = row[0];
           const cells = row[1];
           if (!Array.isArray(cells)) {
-            result.push([cells, y]);
+            result.push([z, cells, y]);
           } else {
             cells.forEach(cell => {
               if (Array.isArray(cell)) {
                 let x = cell[0];
                 const count = cell[1];
                 for (let i = 0; i < count; i++) {
-                  result.push([x, y]);
+                  result.push([z, x, y]);
                   x += 2;
                 }
               } else {
-                result.push([cell, y]);
+                result.push([z, cell, y]);
               }
             });
           }
@@ -135,8 +135,8 @@
 
     //--------------------------
     // der Tile Raum: 30 x 16 x 7
-    const MAX_X = 33;
-    const MAX_Y = 17;
+    const MAX_X = 34;
+    const MAX_Y = 18;
     const MAXLEV = 7;
     const OFFSET = 40;
     const DX = 6;
@@ -176,49 +176,54 @@
       }
     }
 
-    function dropTile(x, y, tileId) {
-      let z = 0;
-      let xp = x + 1;
-      let yp = y + 1;
-      if (xp == MAX_X) {
-        xp = x;
-      }
-      if (yp == MAX_Y) {
-        yp = y;
-      }
+    // function dropTile(x, y, tileId) {
+    //   let z = 0;
+    //   let xp = x + 1;
+    //   let yp = y + 1;
+    //   if (xp == MAX_X) {
+    //     xp = x;
+    //   }
+    //   if (yp == MAX_Y) {
+    //     yp = y;
+    //   }
 
-      for (let i = 0; i < MAXLEV; i++) {
-        if ((mjCube[x][y][z] == -1) && (mjCube[xp][y][z] == -1)
-          && (mjCube[x][yp][z] == -1) && (mjCube[xp][yp][z] == -1)) {
-          break;
-        }
-        z++;
-        if (z == MAXLEV) {
-          return -1;
-        }
-      }
-      mjCube[x][y][z] = tileId;
-      mjCube[xp][y][z] = tileId;
-      mjCube[x][yp][z] = tileId;
-      mjCube[xp][yp][z] = tileId;
+    //   for (let i = 0; i < MAXLEV; i++) {
+    //     if ((mjCube[x][y][z] == -1) && (mjCube[xp][y][z] == -1)
+    //       && (mjCube[x][yp][z] == -1) && (mjCube[xp][yp][z] == -1)) {
+    //       break;
+    //     }
+    //     z++;
+    //     if (z == MAXLEV) {
+    //       return -1;
+    //     }
+    //   }
+    //   mjCube[x][y][z] = tileId;
+    //   mjCube[xp][y][z] = tileId;
+    //   mjCube[x][yp][z] = tileId;
+    //   mjCube[xp][yp][z] = tileId;
 
-      return z;
-    }
+    //   return z;
+    // }
 
     function fillMjCube(layout, tiles) {
       for (let lo = 0; lo < layout.length; lo++) {
-        let lox = layout[lo][0];
-        let loy = layout[lo][1];
+        let x = layout[lo][1];
+        let y = layout[lo][2];
         let tid = tileIds[lo];
         let tile = tiles[tid];
 
-        let z = dropTile(lox, loy, tid);
-        tile.x = lox;
-        tile.y = loy;
+        let z = layout[lo][0];
+        tile.x = x;
+        tile.y = y;
         tile.z = z;
-        tile.img.style.left = (lox * 24) + OFFSET + (z * DX) + "px";
-        tile.img.style.top = (loy * 35) + OFFSET - (z * DY) + "px";
+        tile.img.style.left = (x * 24) + OFFSET + (z * DX) + "px";
+        tile.img.style.top = (y * 35) + OFFSET - (z * DY) + "px";
         // tile.img.setAttribute("data-ix", "my data: " + lox);
+
+        mjCube[x][y][z] = tid;
+        mjCube[x + 1][y][z] = tid;
+        mjCube[x][y + 1][z] = tid;
+        mjCube[x +1][y +1][z] = tid;
       }
     }
 
