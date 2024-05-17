@@ -291,13 +291,18 @@
       console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
       resetTiles();
       resetMjCube();
-      // resetZIndex();
-
+      
       console.log(obj[ele.value].name);
       actLayout = expandMapping(obj[ele.value].map);
+      if (gensolvable) {
+        getSolvableGame(actLayout);
+      } else {
+        getGame();
+      }
       fillMjCube(actLayout, tiles);
       // adjustZIndex();
       setTilesVisible();
+      updateBoard();
     }
 
     // parse map: https://github.com/ffalt/mah/blob/main/src/app/model/mapping.ts
@@ -308,8 +313,10 @@
     var applause = new Audio("images/APPLAUSE.wav");
 
     let gensolvable = true;
-    let generator = pseudoRandom(1);
     const MAXBOARDNUM = 10000000;
+    let bnum = Math.floor(Math.random() * MAXBOARDNUM);
+    let generator = pseudoRandom(bnum);
+    document.getElementById("boardno").value = bnum;
     const filter1 = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7)) ";
     const types = ["circle", "bamboo", "character", "wind", "dragon", "season", "flower"];
     let tileIds = new Array(144);
@@ -327,6 +334,8 @@
     }
 
     function getGame() {
+      generator = pseudoRandom(bnum);
+
       for (let i = 0; i < tileIds.length; i++) {
         tileIds[i] = i;
       }
@@ -361,15 +370,15 @@
         ele.blur();
         resetTiles();
         resetMjCube();
-        // resetZIndex();
-        generator = pseudoRandom(ele.value);
+        bnum = ele.value;
+        generator = pseudoRandom(bnum);
 
         if (gensolvable) {
           getSolvableGame(actLayout);
         } else {
           getGame();
-          fillMjCube(actLayout, tiles);
         }
+        fillMjCube(actLayout, tiles);
 
         setTilesVisible();
         tilesOnBoard = 144;
@@ -567,7 +576,7 @@
         tiles[i].removed = false;
         tiles[i].img.style.visibility = "hidden";
         tiles[i].img.style.zIndex = "unset";
-        tileIds[i] = i;
+        // tileIds[i] = i;
       }
     }
 
@@ -575,15 +584,13 @@
       let zi = 5;
       tilesOnBoard = 0;
       for (let z = 0; z < MAXLEV; z++) {
-        zi += 1;
         for (let x = MAX_X - 1; x >= 0; x--) {
-          zi += 1;
           for (let y = 0; y < MAX_Y; y++) {
             if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
               let tile = tiles[mjCube[x][y][z]];
               tile.img.style.visibility = "visible";
               tilesOnBoard++;
-              tile.img.style.zIndex = zi;
+              tile.img.style.zIndex = zi++;
             }
           }
         }
@@ -743,15 +750,13 @@
         tiles[t].img.style.position = "absolute";
         tiles[t].img.style.width = "50px";
         tiles[t].img.setAttribute("draggable", false);
+        tiles[t].img.style.zIndex = "unset";
         t++;
       }
     }
 
     resetTiles();
     resetMjCube();
-    let bnum = Math.floor(Math.random() * MAXBOARDNUM);
-    generator = pseudoRandom(bnum);
-    document.getElementById("boardno").value = bnum;
 
     if (gensolvable) {
       getSolvableGame(actLayout);
@@ -764,24 +769,11 @@
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
     updateBoard();
 
-    resetTiles();
-    resetMjCube();
-    fillMjCube(actLayout, tiles);
-    setTilesVisible();
-    tilesOnBoard = 144;
-    document.getElementById("tilnum").innerHTML = tilesOnBoard;
-    updateBoard();
-
-
     // let text = "";
     // for (let i = 0; i < tiles.length; i++) {
     //   text += tiles[i].img.src + ", " + tiles[i].x + ", " + tiles[i].y +
     //     ", " + tiles[i].z + ", " + tiles[i].img.style.zIndex + ", " + tiles[i].onclick + "<br>";
     // }
-    // // docimgs[1].style.top = "750px";
-    // // docimgs[2].style.visibility = "hidden";
-
-    // document.getElementById("demo").innerHTML = text;
 
     //--------------------------
     // Key Handling

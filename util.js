@@ -3,6 +3,8 @@ function log(str) {
 }
 
 function getSolvableGame(layout) {
+  generator = pseudoRandom(bnum);
+
   let pairs = new Array(72);
   for (let i = 0; i < 72; i++) {
     pairs[i] = new Match(tiles[2 * i], tiles[2 * i + 1]);
