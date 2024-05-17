@@ -291,7 +291,7 @@
       console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
       resetTiles();
       resetMjCube();
-      resetZIndex();
+      // resetZIndex();
 
       console.log(obj[ele.value].name);
       actLayout = expandMapping(obj[ele.value].map);
@@ -361,7 +361,7 @@
         ele.blur();
         resetTiles();
         resetMjCube();
-        resetZIndex();
+        // resetZIndex();
         generator = pseudoRandom(ele.value);
 
         if (gensolvable) {
@@ -416,11 +416,11 @@
       }
     }
 
-    function resetZIndex() {
-      for (let i = 0; i < tiles.length; i++) {
-        tiles[i].img.style.zIndex = "unset";
-      }
-    }
+    // function resetZIndex() {
+    //   for (let i = 0; i < tiles.length; i++) {
+    //     tiles[i].img.style.zIndex = "unset";
+    //   }
+    // }
 
     function fillMjCube(layout, tiles) {
       for (let lo = 0; lo < layout.length; lo++) {
@@ -440,7 +440,7 @@
         mjCube[x][y][z] = tid;
         mjCube[x + 1][y][z] = tid;
         mjCube[x][y + 1][z] = tid;
-        mjCube[x +1][y +1][z] = tid;
+        mjCube[x + 1][y + 1][z] = tid;
       }
     }
 
@@ -566,6 +566,8 @@
         tiles[i].z = -1;
         tiles[i].removed = false;
         tiles[i].img.style.visibility = "hidden";
+        tiles[i].img.style.zIndex = "unset";
+        tileIds[i] = i;
       }
     }
 
@@ -747,7 +749,6 @@
 
     resetTiles();
     resetMjCube();
-    resetZIndex();
     let bnum = Math.floor(Math.random() * MAXBOARDNUM);
     generator = pseudoRandom(bnum);
     document.getElementById("boardno").value = bnum;
@@ -756,12 +757,21 @@
       getSolvableGame(actLayout);
     } else {
       getGame();
-      fillMjCube(actLayout, tiles);
     }
+    fillMjCube(actLayout, tiles);
     setTilesVisible();
     tilesOnBoard = 144;
     document.getElementById("tilnum").innerHTML = tilesOnBoard;
     updateBoard();
+
+    resetTiles();
+    resetMjCube();
+    fillMjCube(actLayout, tiles);
+    setTilesVisible();
+    tilesOnBoard = 144;
+    document.getElementById("tilnum").innerHTML = tilesOnBoard;
+    updateBoard();
+
 
     // let text = "";
     // for (let i = 0; i < tiles.length; i++) {

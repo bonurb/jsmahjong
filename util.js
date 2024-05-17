@@ -14,7 +14,7 @@ function getSolvableGame(layout) {
   }
 
   resetMjCube();
-  resetZIndex();
+  // resetZIndex();
   undoStack = [];
   for (let i = 0; i < tileIds.length; i++) {
     tileIds[i] = i;
@@ -106,4 +106,9 @@ function getSolvableGame(layout) {
     til2.img.style.top = (til2.y * 35) + OFFSET - (til2.z * DY) + "px";
   }
 
+  // set tileIds
+  for (let i = 0; i < tileIds.length; i++) {
+    tileIds[i] = mjCube[layout[i][1]][layout[i][2]][layout[i][0]];
+  }
+  resetMjCube();
 }
