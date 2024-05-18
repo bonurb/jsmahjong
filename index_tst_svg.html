@@ -48,6 +48,12 @@
     </select>
   </div>
 
+  <div style="display: flex; justify-content: left; align-items: center; 
+      width: 200px; height: 200px; border: 1px solid black; position:absolute; left: 850px; top: 280px">
+    <p id="thumb" style="padding-left: 10px;"></p>
+  </div>
+
+  <script src="layout-svg.js"></script>
   <script>
     const jsonlayouts = '['
       + '{"id":"2175883231","name":"Turtle","map":[[0,[[0,[[2,12]]],[2,[[6,8]]],[4,[[4,10]]],[6,[[2,12]]],[7,[0,[26,2]]],[8,[[2,12]]],[10,[[4,10]]],[12,[[6,8]]],[14,[[2,12]]]]],[1,[[2,[[8,6]]],[4,[[8,6]]],[6,[[8,6]]],[8,[[8,6]]],[10,[[8,6]]],[12,[[8,6]]]]],[2,[[4,[[10,4]]],[6,[[10,4]]],[8,[[10,4]]],[10,[[10,4]]]]],[3,[[6,[[12,2]]],[8,[[12,2]]]]],[4,[[7,13]]]]},'
@@ -59,6 +65,9 @@
       + '{"id":"3878481316","name":"Monkey","map":[[0,[[0,[[0,4],[18,2],28]],[2,[0,[6,3],[16,2],[26,2]]],[4,[[0,2],[10,4],26]],[6,[[8,7],26]],[7,6],[8,[[8,5],[20,2],26]],[10,[[0,2],10,14,22,26]],[12,[2,[8,2],14,18,[22,3]]],[14,[[2,4],[14,3]]]]],[1,[[0,[[2,2]]],[1,[0,6,18,28]],[2,[[8,2],16]],[3,[0,26]],[4,[[10,4]]],[5,26],[6,[[8,6]]],[7,[20,26]],[8,[[8,5]]],[9,[22,26]],[10,10],[11,[2,14,22,26]],[12,[10,24]],[13,[2,8]],[14,[[4,2],[15,2]]]]],[2,[[0,3],[2,0],[4,[[10,4],26]],[6,[[9,5],26]],[8,[[10,4],26]],[10,[22,26]],[12,2],[14,[5,16]]]],[3,[[4,[[10,4]]],[5,26],[6,[[10,4]]],[7,26],[8,[[10,4]]],[9,26]]],[4,[[6,26],[8,26]]]]}'
       + ']';
     const obj = JSON.parse(jsonlayouts);
+
+    let thumb = generateSVG(expandMapping(obj[0].map));
+    document.getElementById("thumb").innerHTML = thumb;
 
     let lolist = document.getElementById("layoutlist");
 
@@ -77,6 +86,8 @@
 
       console.log(obj[ele.value].name);
       let loexp = expandMapping(obj[ele.value].map);
+      thumb = generateSVG(loexp);
+      document.getElementById("thumb").innerHTML = thumb;
       fillMjCube(loexp, tiles);
       // adjustZIndex();
       setTilesVisible();
@@ -224,7 +235,7 @@
         mjCube[x][y][z] = tid;
         mjCube[x + 1][y][z] = tid;
         mjCube[x][y + 1][z] = tid;
-        mjCube[x +1][y +1][z] = tid;
+        mjCube[x + 1][y + 1][z] = tid;
       }
     }
 
