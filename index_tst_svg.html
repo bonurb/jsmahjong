@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html>
 
+<style>
+  /* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 100px;
+  left: 30px;
+  top: 30px;
+  width: 90%;
+  height: 90%;
+  overflow: auto;
+  background-color: rgb(167, 167, 167);
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #9bb88b;
+  margin: auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+
 <body>
 
   <head>
@@ -50,11 +94,43 @@
 
   <div style="display: flex; justify-content: left; align-items: center; 
       width: 200px; height: 200px; border: 1px solid black; position:absolute; left: 850px; top: 280px">
-    <p id="thumb" style="padding-left: 10px;"></p>
+    <p id="thumb" onclick="openModal()" style="padding-left: 10px;"></p>
   </div>
 
+  <div id="myModal" class="modal">
+    <span class="close cursor" onclick="closeModal()">&times;</span>
+    <div class="modal-content" style="display: flex;">
+      <div class="card" style="width: 200px; height: 220px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb" style="padding-left: 10px;"></p>
+        <div class="container">
+          <p style="font: 30px 'Brush Script MT', normal; text-align: center;
+          border-radius: 5px; border: 2px solid black;">Turtle</p> 
+        </div>
+      </div>
+
+      <div class="card" style="width: 200px; height: 220px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb2" style="padding-left: 10px;"></p>
+        <div class="container">
+          <p style="font: 30px 'Brush Script MT', normal; text-align: center;
+          border-radius: 5px; border: 2px solid black;">Turtle</p> 
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
   <script src="layout-svg.js"></script>
   <script>
+    function openModal() {
+      document.getElementById("myModal").style.display = "block";
+      document.getElementById("modthumb").innerHTML = thumb;
+      document.getElementById("modthumb2").innerHTML = thumb;
+    }
+
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+
     const jsonlayouts = '['
       + '{"id":"2175883231","name":"Turtle","map":[[0,[[0,[[2,12]]],[2,[[6,8]]],[4,[[4,10]]],[6,[[2,12]]],[7,[0,[26,2]]],[8,[[2,12]]],[10,[[4,10]]],[12,[[6,8]]],[14,[[2,12]]]]],[1,[[2,[[8,6]]],[4,[[8,6]]],[6,[[8,6]]],[8,[[8,6]]],[10,[[8,6]]],[12,[[8,6]]]]],[2,[[4,[[10,4]]],[6,[[10,4]]],[8,[[10,4]]],[10,[[10,4]]]]],[3,[[6,[[12,2]]],[8,[[12,2]]]]],[4,[[7,13]]]]},'
       + '{"id":"1830783848","name":"Fly","map":[[0,[[0,[[1,4],[19,4]]],[2,[[1,4],[12,2],[19,4]]],[4,[[5,9]]],[6,[[0,2],[9,5],[24,2]]],[8,[0,[8,6],26]],[10,[[4,10]]],[12,[[0,4],[10,4],[20,4]]],[14,[[0,4],[11,3],[20,4]]]]],[1,[[0,[[3,3],[19,3]]],[2,[[3,3],[12,2],[19,3]]],[4,[7,19]],[6,[[0,2],[11,3],[24,2]]],[8,[0,[10,4],26]],[10,[[8,6]]],[12,[[2,3],[20,3]]],[14,[[2,3],[11,3],[20,3]]]]],[2,[[1,[[4,2],[20,2]]],[2,13],[6,13],[8,[[12,2]]],[10,[[12,2]]],[13,[[3,2],[21,2]]],[14,13]]],[3,[[8,13],[10,13]]]]},'
