@@ -315,21 +315,6 @@
       }
     }
 
-    function adjustZIndex() {
-      let zi = 5;
-      for (let z = 0; z < MAXLEV; z++) {
-        for (let x = MAX_X - 1; x >= 0; x--) {
-          for (let y = 0; y < MAX_Y; y++) {
-            if (mjCube[x][y][z] != -1) {
-              let tile = tiles[mjCube[x][y][z]];
-              if (tile.img.style.zIndex == "unset") {
-                tile.img.style.zIndex = zi++;
-              }
-            }
-          }
-        }
-      }
-    }
     //--------------------------
     //--------------------------
     // Tile
@@ -377,6 +362,10 @@
               tile.img.style.visibility = "visible";
               tilesOnBoard++;
               tile.img.style.zIndex = zi;
+              if ((x >= 1 && y >= 1) && (mjCube[x][y - 1][z] != -1) && (mjCube[x - 1][y - 1][z] != -1) &&
+              (tiles[mjCube[x][y - 1][z]].img.id == tiles[mjCube[x - 1][y - 1][z]].img.id)) {
+                tile.img.style.zIndex = zi++;
+              }
             }
           }
         }
@@ -398,6 +387,7 @@
 
     let tiles = new Array();
     let t = 0;
+    let clickedImg;
     for (let i = 0; i < 144; i++) {
       let di = Math.floor(Math.random() * docimgs.length);
       let diimg = docimgs[di].cloneNode(true);
@@ -405,7 +395,8 @@
       let ditile = new Tile(diimg, diimg.alt);
 
       docimgs[i].onclick = function (e) {
-        console.log("in onClick(): " + e.target.id);
+        clickedImg = e.target;
+        console.log("in onClick(): " + clickedImg.id + "-" + clickedImg.style.zIndex);
         //   let til = tiles[e.target.id];
         //   // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
@@ -434,6 +425,22 @@
     fillMjCube(loexp, tiles);
     // adjustZIndex();
     setTilesVisible();
+
+    document.onkeydown = function (e) {
+      // e = e || window.event;
+      console.log(e.key);
+      // let m;
+      if (e.key == "z") {
+        if (clickedImg) {
+          clickedImg.style.zIndex = parseInt(clickedImg.style.zIndex) + 1;
+        }
+      }
+      if (e.key == "r") {
+        if (clickedImg) {
+          clickedImg.style.visibility = "hidden";
+        }
+      }
+    }
   </script>
 </body>
 
