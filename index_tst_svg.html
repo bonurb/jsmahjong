@@ -394,7 +394,7 @@
       docimgs[di].parentNode.appendChild(diimg);
       let ditile = new Tile(diimg, diimg.alt);
 
-      docimgs[i].onclick = function (e) {
+      diimg.onclick = function (e) {
         clickedImg = e.target;
         console.log("in onClick(): " + clickedImg.id + "-" + clickedImg.style.zIndex);
         //   let til = tiles[e.target.id];
