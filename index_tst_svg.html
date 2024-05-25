@@ -16,7 +16,7 @@
   background-color: rgb(167, 167, 167);
 }
 
-/* Modal Content */
+/* Modal Content
 .modal-content {
   position: relative;
   background-color: #9bb88b;
@@ -24,7 +24,7 @@
   padding: 0;
   width: 90%;
   max-width: 1200px;
-}
+} */
 
 /* The Close Button */
 .close {
@@ -99,17 +99,17 @@
 
   <div id="myModal" class="modal">
     <span class="close cursor" onclick="closeModal()">&times;</span>
-    <div class="modal-content" style="display: flex;">
-      <div class="card" style="width: 200px; height: 220px; border-radius: 5px; border: 1px solid black;">
-        <p id="modthumb" style="padding-left: 10px;"></p>
+    <div class="modal-content" style="display: flex; background-color: #9bb88b;">
+      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
           <p style="font: 30px 'Brush Script MT', normal; text-align: center;
           border-radius: 5px; border: 2px solid black;">Turtle</p> 
         </div>
       </div>
 
-      <div class="card" style="width: 200px; height: 220px; border-radius: 5px; border: 1px solid black;">
-        <p id="modthumb2" style="padding-left: 10px;"></p>
+      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb2" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
           <p style="font: 30px 'Brush Script MT', normal; text-align: center;
           border-radius: 5px; border: 2px solid black;">Turtle</p> 
@@ -124,7 +124,7 @@
     function openModal() {
       document.getElementById("myModal").style.display = "block";
       document.getElementById("modthumb").innerHTML = thumb;
-      document.getElementById("modthumb2").innerHTML = thumb;
+      document.getElementById("modthumb2").innerHTML = generateSVG(expandMapping(obj[0].map));
     }
 
     function closeModal() {
