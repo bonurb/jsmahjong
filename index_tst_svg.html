@@ -3,20 +3,20 @@
 
 <style>
   /* The Modal (background) */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  padding-top: 100px;
-  left: 30px;
-  top: 30px;
-  width: 90%;
-  height: 90%;
-  overflow: auto;
-  background-color: rgb(167, 167, 167);
-}
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    padding-top: 100px;
+    left: 30px;
+    top: 30px;
+    width: 90%;
+    height: 90%;
+    overflow: auto;
+    background-color: rgb(167, 167, 167);
+  }
 
-/* Modal Content
+  /* Modal Content
 .modal-content {
   position: relative;
   background-color: #9bb88b;
@@ -26,23 +26,22 @@
   max-width: 1200px;
 } */
 
-/* The Close Button */
-.close {
-  color: white;
-  position: absolute;
-  top: 10px;
-  right: 25px;
-  font-size: 35px;
-  font-weight: bold;
-}
+  /* The Close Button */
+  .close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+  }
 
-.close:hover,
-.close:focus {
-  color: #999;
-  text-decoration: none;
-  cursor: pointer;
-}
-
+  .close:hover,
+  .close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+  }
 </style>
 
 <body>
@@ -67,7 +66,8 @@
   <image x="-10" y="0" width="300" height="300" href="planar/spring.svg" filter="url(#f3)"/>
 </svg-->
 
-  <div style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
+  <div id="board"
+    style="width: 1400px; height: 600px; position:relative; top:20px; left:20px; border: 1px solid black;">
     <img src="planar/spring.svg" alt="bamboo">
     <img src="planar/0101.svg" alt="bamboo">
     <!--img src="planar/0102.svg" alt="bamboo">
@@ -104,7 +104,7 @@
         <p id="modthumb" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
           <p style="font: 30px 'Brush Script MT', normal; text-align: center;
-          border-radius: 5px; border: 2px solid black;">Turtle</p> 
+          border-radius: 5px; border: 2px solid black;">Turtle</p>
         </div>
       </div>
 
@@ -112,13 +112,13 @@
         <p id="modthumb2" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
           <p style="font: 30px 'Brush Script MT', normal; text-align: center;
-          border-radius: 5px; border: 2px solid black;">Turtle</p> 
+          border-radius: 5px; border: 2px solid black;">Turtle</p>
         </div>
       </div>
     </div>
   </div>
-  
-  
+
+
   <script src="layout-svg.js"></script>
   <script>
     function openModal() {
@@ -161,13 +161,14 @@
       resetMjCube();
       resetZIndex();
 
-      console.log(obj[ele.value].name);
+      // console.log(obj[ele.value].name);
       let loexp = expandMapping(obj[ele.value].map);
       thumb = generateSVG(loexp);
       document.getElementById("thumb").innerHTML = thumb;
       fillMjCube(loexp, tiles);
       // adjustZIndex();
-      setTilesVisible();
+      // setTilesVisible();
+      placeTiles();
     }
 
     // parse map: https://github.com/ffalt/mah/blob/main/src/app/model/mapping.ts
@@ -364,7 +365,7 @@
               tilesOnBoard++;
               tile.img.style.zIndex = zi;
               if ((x >= 1 && y >= 1) && (mjCube[x][y - 1][z] != -1) && (mjCube[x - 1][y - 1][z] != -1) &&
-              (tiles[mjCube[x][y - 1][z]].img.id == tiles[mjCube[x - 1][y - 1][z]].img.id)) {
+                (tiles[mjCube[x][y - 1][z]].img.id == tiles[mjCube[x - 1][y - 1][z]].img.id)) {
                 tile.img.style.zIndex = zi++;
               }
             }
@@ -372,6 +373,55 @@
         }
       }
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
+    }
+
+    function placeTiles() {
+      let board = document.getElementById("board");
+      board.replaceChildren();
+
+      let til;
+      while (true) {
+        til = upperRight();
+        if (til == undefined) {
+          break;
+        }
+        board.appendChild(til.img);
+        til.img.style.visibility = "visible";
+        tilesOnBoard++;
+      }
+    }
+
+    function upperRight() {
+      let tile = undefined;
+      for (let z = 0; z < MAXLEV; z++) {
+        for (let x = MAX_X - 1; x >= 0; x--) {
+          for (let y = 0; y < MAX_Y; y++) {
+            if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
+              tile = upperLeft(x - 1, y - 1, z);
+              if (tile == undefined) {
+                return tiles[mjCube[x][y][z]];
+              }
+              return tile;
+            }
+          }
+        }
+      }
+      return tile;
+    }
+
+    function upperLeft(x, y, z) {
+      if (x <= 0 || y <= 0) {
+        return undefined;
+      }
+      let tile = undefined;
+      if ((mjCube[x - 1][y - 1][z] != -1)
+        && (tiles[mjCube[x - 1][y - 1][z]].img.style.visibility == "hidden")) {
+        tile = upperLeft(x - 1, y - 1, z);
+        if (tile == undefined) {
+          tile = tiles[mjCube[x - 1][y - 1][z]];
+        }
+      }
+      return tile;
     }
     // Tile
     //--------------------------
