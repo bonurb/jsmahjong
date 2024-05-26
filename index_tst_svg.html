@@ -397,7 +397,7 @@
         for (let x = MAX_X - 1; x >= 0; x--) {
           for (let y = 0; y < MAX_Y; y++) {
             if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
-              tile = upperLeft(x - 1, y - 1, z);
+              tile = upperLeft(x, y, z);
               if (tile == undefined) {
                 return tiles[mjCube[x][y][z]];
               }
@@ -415,10 +415,13 @@
       }
       let tile = undefined;
       if ((mjCube[x - 1][y - 1][z] != -1)
-        && (tiles[mjCube[x - 1][y - 1][z]].img.style.visibility == "hidden")) {
+        && (tiles[mjCube[x - 1][y - 1][z]].img.style.visibility == "hidden")
+        // && ((tiles[mjCube[x][y - 1][z]] != -1) 
+        //     && (tiles[mjCube[x - 1][y - 1][z]].img.id != tiles[mjCube[x][y - 1][z]].img.id))
+        ) {
         tile = upperLeft(x - 1, y - 1, z);
         if (tile == undefined) {
-          tile = tiles[mjCube[x - 1][y - 1][z]];
+          tile = tiles[mjCube[x][y][z]];
         }
       }
       return tile;
