@@ -382,7 +382,7 @@
 
       let til;
       while (true) {
-        til = upperRight();
+        til = getNextDrawable();
         if (til == undefined) {
           break;
         }
@@ -392,45 +392,40 @@
       }
     }
 
-    function upperRight() {
-      let tile = undefined;
+    function getNextDrawable() {
       for (let z = 0; z < MAXLEV; z++) {
         for (let x = MAX_X - 1; x >= 0; x--) {
           for (let y = 0; y < MAX_Y; y++) {
             if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
               let thidden = tiles[mjCube[x][y][z]];
-              tile = upperLeft(thidden.x, thidden.y, z);
-              if (tile == undefined) {
+              if (isDrawable(thidden.x, thidden.y, z)) {
                 return thidden;
               }
-              return tile;
             }
           }
         }
       }
-      return tile;
+      return undefined;
     }
 
-    function upperLeft(x, y, z) {
-      if (x <= 0 || y <= 0) {
-        return undefined;
+    function isDrawable(x, y, z) {
+      if (((x + 1) == MAX_X) || (x == 0)) {
+        return true;
       }
-      let tile = undefined;
-      if ((mjCube[x - 1][y - 1][z] != -1)
-        && (tiles[mjCube[x - 1][y - 1][z]].img.style.visibility == "hidden")
-        // && ((tiles[mjCube[x][y - 1][z]] != -1) 
-        //     && (tiles[mjCube[x - 1][y - 1][z]].img.id != tiles[mjCube[x][y - 1][z]].img.id))
-      ) {
-        let thidden = tiles[mjCube[x - 1][y - 1][z]];
-        if (mjCube[x][y - 1][z] == -1) {
-          return undefined;
+      if (((y + 1) == MAX_Y) || (y == 0)) {
+        return true;
+      }
+      if ((mjCube[x][y - 1][z] != -1)) {
+        if (tiles[mjCube[x][y - 1][z]].img.style.visibility == "hidden") {
+          return false;
         }
-        tile = upperLeft(thidden.x, thidden.y, z);
       }
-      if (tile == undefined) {
-        tile = tiles[mjCube[x][y][z]];
+      if ((mjCube[x + 1][y - 1][z] != -1)) {
+        if (tiles[mjCube[x + 1][y - 1][z]].img.style.visibility == "hidden") {
+          return false;
+        }
       }
-      return tile;
+      return true;
     }
     // Tile
     //--------------------------
