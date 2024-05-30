@@ -12,7 +12,8 @@
 <body>
   <!-- Schritte: left: 50; top: 70 -->
 
-  <div style="width: 1400px; height: 630px; position:relative; top:20px; left:20px; border: 1px solid black;">
+  <div id="board" style="width: 1400px; height: 630px; position:relative; 
+    top:20px; left:20px; border: 1px solid black;">
     <!--img src="planar/0301.svg" alt="bamboo" style="backgroundColor: rgba(245, 245, 217, 0.904);"-->
     <img src="planar/0301.svg" alt="bamboo">
     <img src="planar/0301.svg" alt="bamboo">
@@ -291,7 +292,7 @@
       console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
       resetTiles();
       resetMjCube();
-      
+
       console.log(obj[ele.value].name);
       actLayout = expandMapping(obj[ele.value].map);
       if (gensolvable) {
@@ -300,8 +301,9 @@
         getGame();
       }
       fillMjCube(actLayout, tiles);
+      placeTiles();
       // adjustZIndex();
-      setTilesVisible();
+      // setTilesVisible();
       updateBoard();
     }
 
@@ -379,10 +381,11 @@
           getGame();
         }
         fillMjCube(actLayout, tiles);
+        placeTiles();
 
-        setTilesVisible();
-        tilesOnBoard = 144;
-        document.getElementById("tilnum").innerHTML = tilesOnBoard;
+        // setTilesVisible();
+        // tilesOnBoard = 144;
+        // document.getElementById("tilnum").innerHTML = tilesOnBoard;
         updateBoard();
       }
     }
@@ -424,12 +427,6 @@
         }
       }
     }
-
-    // function resetZIndex() {
-    //   for (let i = 0; i < tiles.length; i++) {
-    //     tiles[i].img.style.zIndex = "unset";
-    //   }
-    // }
 
     function fillMjCube(layout, tiles) {
       for (let lo = 0; lo < layout.length; lo++) {
@@ -580,26 +577,58 @@
       }
     }
 
-    function setTilesVisible() {
-      let zi = 5;
+    function placeTiles() {
+      let board = document.getElementById("board");
+      board.replaceChildren();
       tilesOnBoard = 0;
+
+      let til;
+      while (true) {
+        til = getNextDrawable();
+        if (til == undefined) {
+          break;
+        }
+        board.appendChild(til.img);
+        til.img.style.visibility = "visible";
+        tilesOnBoard++;
+      }
+      document.getElementById("tilnum").innerHTML = tilesOnBoard;
+    }
+
+    function getNextDrawable() {
       for (let z = 0; z < MAXLEV; z++) {
         for (let x = MAX_X - 1; x >= 0; x--) {
           for (let y = 0; y < MAX_Y; y++) {
             if ((mjCube[x][y][z] != -1) && (tiles[mjCube[x][y][z]].img.style.visibility == "hidden")) {
-              let tile = tiles[mjCube[x][y][z]];
-              tile.img.style.visibility = "visible";
-              tilesOnBoard++;
-              tile.img.style.zIndex = zi++;
-              if ((x >= 1 && y >= 1) && (mjCube[x][y - 1][z] != -1) && (mjCube[x - 1][y - 1][z] != -1) &&
-              (tiles[mjCube[x][y - 1][z]].img.id == tiles[mjCube[x - 1][y - 1][z]].img.id)) {
-                tile.img.style.zIndex = zi++;
+              let thidden = tiles[mjCube[x][y][z]];
+              if (isDrawable(thidden.x, thidden.y, z)) {
+                return thidden;
               }
             }
           }
         }
       }
-      document.getElementById("tilnum").innerHTML = tilesOnBoard;
+      return undefined;
+    }
+
+    function isDrawable(x, y, z) {
+      if (((x + 1) == MAX_X) || (x == 0)) {
+        return true;
+      }
+      if (((y + 1) == MAX_Y) || (y == 0)) {
+        return true;
+      }
+      if ((mjCube[x][y - 1][z] != -1)) {
+        if (tiles[mjCube[x][y - 1][z]].img.style.visibility == "hidden") {
+          return false;
+        }
+      }
+      if ((mjCube[x + 1][y - 1][z] != -1)) {
+        if (tiles[mjCube[x + 1][y - 1][z]].img.style.visibility == "hidden") {
+          return false;
+        }
+      }
+      return true;
     }
 
     function doTilesMatch(til, til2) {
@@ -754,7 +783,7 @@
         tiles[t].img.style.position = "absolute";
         tiles[t].img.style.width = "50px";
         tiles[t].img.setAttribute("draggable", false);
-        tiles[t].img.style.zIndex = "unset";
+        tiles[t].img.style.zIndex = 0;
         t++;
       }
     }
@@ -768,9 +797,10 @@
       getGame();
     }
     fillMjCube(actLayout, tiles);
-    setTilesVisible();
-    tilesOnBoard = 144;
-    document.getElementById("tilnum").innerHTML = tilesOnBoard;
+    placeTiles();
+    // setTilesVisible();
+    // tilesOnBoard = 144;
+    // document.getElementById("tilnum").innerHTML = tilesOnBoard;
     updateBoard();
 
     // let text = "";
