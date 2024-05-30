@@ -288,6 +288,14 @@
       return result;
     }
 
+    function getSolvGame(lo) {
+      let tn = 1;
+      while (tn > 0) {
+        tn = getSolvableGame(lo);
+        log("gsg tilnum: " + tn);
+      }
+    }
+
     function layoutSelected(ele) {
       console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
       resetTiles();
@@ -296,7 +304,7 @@
       console.log(obj[ele.value].name);
       actLayout = expandMapping(obj[ele.value].map);
       if (gensolvable) {
-        getSolvableGame(actLayout);
+        getSolvGame(actLayout);
       } else {
         getGame();
       }
@@ -376,7 +384,7 @@
         generator = pseudoRandom(bnum);
 
         if (gensolvable) {
-          getSolvableGame(actLayout);
+          getSolvGame(actLayout);
         } else {
           getGame();
         }
@@ -572,7 +580,8 @@
         tiles[i].z = -1;
         tiles[i].removed = false;
         tiles[i].img.style.visibility = "hidden";
-        tiles[i].img.style.zIndex = "unset";
+        tiles[i].img.style.zIndex = 0;
+        tiles[i].img.style.filter = filter1;
         // tileIds[i] = i;
       }
     }
@@ -725,6 +734,7 @@
         // log("in onClick(): " + e.target.id);
         unsel.removeEventListener("ended", playfsel);
         let til = tiles[e.target.id];
+        log(til.x + '-' + til.y);
         if (!til.isSelectable()) {
           return;
         }
@@ -792,7 +802,7 @@
     resetMjCube();
 
     if (gensolvable) {
-      getSolvableGame(actLayout);
+      getSolvGame(actLayout);
     } else {
       getGame();
     }

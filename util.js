@@ -3,7 +3,7 @@ function log(str) {
 }
 
 function getSolvableGame(layout) {
-  generator = pseudoRandom(bnum);
+  // generator = pseudoRandom(bnum);
 
   let pairs = new Array(72);
   for (let i = 0; i < 72; i++) {
@@ -41,8 +41,13 @@ function getSolvableGame(layout) {
 
     calcMatches(ttils);
     if (matches.size == 0 || tilnum == 0) {
-      break;
+      // log("getSolvableGame() tilnum: " + tilnum);
+      if (tilnum == 0) {
+        break;
+      }
+      return tilnum;
     }
+    // log("getSolvableGame() matches.size: " + matches.size);
     match = Array.from(matches)[Math.floor(generator() * matches.size)]
     undoStack.push(match);
     tilnum -= 2;
@@ -89,7 +94,7 @@ function getSolvableGame(layout) {
 
     let til = p.til1;
     til.removed = false;
-    til.img.style.zIndex = "unset";
+    til.img.style.zIndex = 0;
     mjCube[til.x][til.y][til.z] = til.img.id;
     mjCube[til.x + 1][til.y][til.z] = til.img.id;
     mjCube[til.x][til.y + 1][til.z] = til.img.id;
@@ -113,4 +118,5 @@ function getSolvableGame(layout) {
     tileIds[i] = mjCube[layout[i][1]][layout[i][2]][layout[i][0]];
   }
   resetMjCube();
+  return tilnum;
 }
