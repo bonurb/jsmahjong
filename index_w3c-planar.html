@@ -231,14 +231,62 @@
 
   <div style="display: flex; justify-content: left; align-items: center; 
       width: 320px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 210px">
-    <p id="layoutlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:</p>
+    <p id="layoutlabel" onclick="openModal()" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:
+    </p>
     <select id="layoutlist" onchange="layoutSelected(this)" style="font: 30px 'Brush Script MT', normal; background: transparent;
     border: 0px solid black; width: 150px">
     </select>
   </div>
 
+  <div id="myModal" class="modal" style="position: fixed; display: none; top: 0; left: 0; right: 0; bottom: 0; 
+    width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); z-index: 2;
+    align-items: center; justify-content: center;">
+    <span class="close cursor" onclick="closeModal()" style="color: white; position: absolute; top: 10px; 
+    right: 25px; font-size: 35px; font-weight: bold;">&times;</span>
+    <div class="modal-content" style="display: flex; padding-top: 10px; padding-left: 10px;
+      gap: 20px; background-color: #9bb88b; width: 90%; height: 90%;">
+      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb" style="width: 180px; height: 180px; padding-left: 10px;"></p>
+        <div class="container">
+          <p style="font: 30px 'Brush Script MT', normal; text-align: center;
+          border-radius: 5px; border: 2px solid black;">Turtle</p>
+        </div>
+      </div>
+
+      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+        <p id="modthumb2" style="width: 180px; height: 180px; padding-left: 10px;"></p>
+        <div class="container">
+          <p style="font: 30px 'Brush Script MT', normal; text-align: center;
+          border-radius: 5px; border: 2px solid black;">Turtle</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="layout-svg.js"></script>
   <script src="util.js"></script>
   <script>
+    //https://stackoverflow.com/questions/46078328/change-ids-of-child-elements-in-javascript-when-cloning-an-element
+    // function addItemRow() {
+    //   var original = document.getElementById('profile-row' + i);
+    //   var clone = original.cloneNode(true);
+    //   i++;
+    //   clone.id = "profile-row" + i;
+    //   clone.getElementsByTagName('select')[0].id = "select-item" + i;
+    //   clone.getElementsByTagName('input')[0].id = "select-item-value" + i;
+    //   original.parentNode.appendChild(clone);
+    // }
+
+    function openModal() {
+      document.getElementById("myModal").style.display = "flex";
+      document.getElementById("modthumb").innerHTML = generateSVG(expandMapping(obj[0].map));
+      document.getElementById("modthumb2").innerHTML = generateSVG(expandMapping(obj[1].map));
+    }
+
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+
     const jsonlayouts = '['
       + '{"id":"2175883231","name":"Turtle","map":[[0,[[0,[[2,12]]],[2,[[6,8]]],[4,[[4,10]]],[6,[[2,12]]],[7,[0,[26,2]]],[8,[[2,12]]],[10,[[4,10]]],[12,[[6,8]]],[14,[[2,12]]]]],[1,[[2,[[8,6]]],[4,[[8,6]]],[6,[[8,6]]],[8,[[8,6]]],[10,[[8,6]]],[12,[[8,6]]]]],[2,[[4,[[10,4]]],[6,[[10,4]]],[8,[[10,4]]],[10,[[10,4]]]]],[3,[[6,[[12,2]]],[8,[[12,2]]]]],[4,[[7,13]]]]},'
       + '{"id":"1830783848","name":"Fly","map":[[0,[[0,[[1,4],[19,4]]],[2,[[1,4],[12,2],[19,4]]],[4,[[5,9]]],[6,[[0,2],[9,5],[24,2]]],[8,[0,[8,6],26]],[10,[[4,10]]],[12,[[0,4],[10,4],[20,4]]],[14,[[0,4],[11,3],[20,4]]]]],[1,[[0,[[3,3],[19,3]]],[2,[[3,3],[12,2],[19,3]]],[4,[7,19]],[6,[[0,2],[11,3],[24,2]]],[8,[0,[10,4],26]],[10,[[8,6]]],[12,[[2,3],[20,3]]],[14,[[2,3],[11,3],[20,3]]]]],[2,[[1,[[4,2],[20,2]]],[2,13],[6,13],[8,[[12,2]]],[10,[[12,2]]],[13,[[3,2],[21,2]]],[14,13]]],[3,[[8,13],[10,13]]]]},'
