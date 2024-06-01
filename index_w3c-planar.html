@@ -229,13 +229,14 @@
     <p id="matchnum" style="font: 30px 'Brush Script MT', normal;">matchnum</p>
   </div>
 
-  <div style="display: flex; justify-content: left; align-items: center; 
+  <div  onclick="openModal()" style="display: flex; justify-content: left; align-items: center; 
       width: 320px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 210px">
-    <p id="layoutlabel" onclick="openModal()" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:
+    <p id="layoutlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:
     </p>
-    <select id="layoutlist" onchange="layoutSelected(this)" style="font: 30px 'Brush Script MT', normal; background: transparent;
+    <p id="actlayout" style="font: 30px 'Brush Script MT', normal;">actual LO</p>
+    <!--select id="layoutlist" onchange="layoutSelected(this)" style="font: 30px 'Brush Script MT', normal; background: transparent;
     border: 0px solid black; width: 150px">
-    </select>
+    </select-->
   </div>
 
   <div id="myModal" class="modal" style="position: fixed; display: none; top: 0; left: 0; right: 0; bottom: 0; 
@@ -245,10 +246,11 @@
     right: 25px; font-size: 35px; font-weight: bold;">&times;</span>
     <div class="modal-content" style="display: flex; flex-wrap: wrap; overflow: auto; padding-top: 10px; padding-left: 10px;
       gap: 20px; background-color: #9bb88b; width: 90%; height: 90%;">
-      <div id="card" class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+      <div id="card" data-loindex="0" class="card" onclick="layoutSelected(this)" 
+        style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
         <p id="modthumb" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
-          <p id="loname" data-loindex="0" style="font: 30px 'Brush Script MT', normal; text-align: center;
+          <p id="loname" style="font: 30px 'Brush Script MT', normal; text-align: center;
           border-radius: 5px; border: 2px solid black;">Turtle</p>
         </div>
       </div>
@@ -293,6 +295,7 @@
         clone.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
         clone.getElementsByTagName('p')[1].id = "loname" + i;
         clone.getElementsByTagName('p')[1].innerHTML = obj[i].name;
+        clone.dataset.loindex = i;
         original.parentNode.appendChild(clone);
       }
     }
@@ -312,14 +315,15 @@
       + ']';
     const obj = JSON.parse(jsonlayouts);
     let actLayout = expandMapping(obj[0].map);
-    let lolist = document.getElementById("layoutlist");
+    document.getElementById("actlayout").innerHTML = obj[0].name;
+    // let lolist = document.getElementById("layoutlist");
 
-    for (let i = 0; i < obj.length; i++) {
-      var option = document.createElement("option");
-      option.text = obj[i].name;
-      option.value = i;
-      lolist.add(option);
-    }
+    // for (let i = 0; i < obj.length; i++) {
+    //   var option = document.createElement("option");
+    //   option.text = obj[i].name;
+    //   option.value = i;
+    //   lolist.add(option);
+    // }
 
     function expandMapping(map) {
       const result = [];
@@ -359,12 +363,15 @@
     }
 
     function layoutSelected(ele) {
-      console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
+      document.getElementById("myModal").style.display = "none";
+      // console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
+      var loindex = parseInt(ele.dataset.loindex);
+      console.log(loindex + ", " + obj[loindex].name);
+      document.getElementById("actlayout").innerHTML = obj[loindex].name;
       resetTiles();
       resetMjCube();
 
-      console.log(obj[ele.value].name);
-      actLayout = expandMapping(obj[ele.value].map);
+      actLayout = expandMapping(obj[loindex].map);
       if (gensolvable) {
         getSolvGame(actLayout);
       } else {
