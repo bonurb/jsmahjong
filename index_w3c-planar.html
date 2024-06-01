@@ -280,18 +280,21 @@
     function openModal() {
       document.getElementById("myModal").style.display = "flex";
 
-      var i = 0;
       var original = document.getElementById('card');
-      original.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
-      original.getElementsByTagName('p')[1].innerHTML = obj[i].name;
-      var clone = original.cloneNode(true);
-      i++;
-      clone.id = "card" + i;
-      clone.getElementsByTagName('p')[0].id = "modthumb" + i;
-      clone.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
-      clone.getElementsByTagName('p')[1].id = "loname" + i;
-      clone.getElementsByTagName('p')[1].innerHTML = obj[i].name;
-      original.parentNode.appendChild(clone);
+      var parent = original.parentNode;
+      original.parentNode.replaceChildren();
+      original.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[0].map));
+      original.getElementsByTagName('p')[1].innerHTML = obj[0].name;
+      parent.appendChild(original);
+      for (let i = 1; i < obj.length; i++) {
+        var clone = original.cloneNode(true);
+        clone.id = "card" + i;
+        clone.getElementsByTagName('p')[0].id = "modthumb" + i;
+        clone.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
+        clone.getElementsByTagName('p')[1].id = "loname" + i;
+        clone.getElementsByTagName('p')[1].innerHTML = obj[i].name;
+        original.parentNode.appendChild(clone);
+      }
     }
 
     function closeModal() {
