@@ -243,23 +243,23 @@
     align-items: center; justify-content: center;">
     <span class="close cursor" onclick="closeModal()" style="color: white; position: absolute; top: 10px; 
     right: 25px; font-size: 35px; font-weight: bold;">&times;</span>
-    <div class="modal-content" style="display: flex; padding-top: 10px; padding-left: 10px;
+    <div class="modal-content" style="display: flex; flex-wrap: wrap; overflow: auto; padding-top: 10px; padding-left: 10px;
       gap: 20px; background-color: #9bb88b; width: 90%; height: 90%;">
-      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+      <div id="card" class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
         <p id="modthumb" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
-          <p data-loindex="0" style="font: 30px 'Brush Script MT', normal; text-align: center;
+          <p id="loname" data-loindex="0" style="font: 30px 'Brush Script MT', normal; text-align: center;
           border-radius: 5px; border: 2px solid black;">Turtle</p>
         </div>
       </div>
 
-      <div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
+      <!--div class="card" style="width: 200px; height: 270px; border-radius: 5px; border: 1px solid black;">
         <p id="modthumb2" style="width: 180px; height: 180px; padding-left: 10px;"></p>
         <div class="container">
           <p style="font: 30px 'Brush Script MT', normal; text-align: center;
           border-radius: 5px; border: 2px solid black;">Turtle</p>
         </div>
-      </div>
+      </div-->
     </div>
   </div>
 
@@ -279,8 +279,19 @@
 
     function openModal() {
       document.getElementById("myModal").style.display = "flex";
-      document.getElementById("modthumb").innerHTML = generateSVG(expandMapping(obj[0].map));
-      document.getElementById("modthumb2").innerHTML = generateSVG(expandMapping(obj[1].map));
+
+      var i = 0;
+      var original = document.getElementById('card');
+      original.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
+      original.getElementsByTagName('p')[1].innerHTML = obj[i].name;
+      var clone = original.cloneNode(true);
+      i++;
+      clone.id = "card" + i;
+      clone.getElementsByTagName('p')[0].id = "modthumb" + i;
+      clone.getElementsByTagName('p')[0].innerHTML = generateSVG(expandMapping(obj[i].map));
+      clone.getElementsByTagName('p')[1].id = "loname" + i;
+      clone.getElementsByTagName('p')[1].innerHTML = obj[i].name;
+      original.parentNode.appendChild(clone);
     }
 
     function closeModal() {
