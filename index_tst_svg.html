@@ -84,7 +84,7 @@
     <p id="tilnum" style="font: 30px 'Brush Script MT', normal;">tilnum</p>
   </div>
 
-  <div style="display: flex; justify-content: left; align-items: center; 
+  <div onClick="openEditor()" style="display: flex; justify-content: left; align-items: center; 
       width: 320px; height: 40px; border: 1px solid black; position:absolute; left: 850px; top: 210px">
     <p id="layoutlabel" style="font: 30px 'Brush Script MT', normal; padding-left: 10px;">Layout:</p>
     <select id="layoutlist" onchange="layoutSelected(this)" style="font: 30px 'Brush Script MT', normal; background: transparent;
@@ -121,6 +121,10 @@
 
   <script src="layout-svg.js"></script>
   <script>
+    function openEditor() {
+      window.open("file:///C:/brtmp/java/jsmahjong/index_tsty.html", "Editor", "width=500,height=500");
+    }
+
     function openModal() {
       document.getElementById("myModal").style.display = "block";
       document.getElementById("modthumb").innerHTML = thumb;
