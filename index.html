@@ -440,6 +440,8 @@
     var unsel = new Audio("images/77.WAV");
     var applause = new Audio("images/APPLAUSE.WAV");
 
+    [firstsel, selRemove, unsel, applause].forEach(a => a.preload = "auto");
+
     // Audio-Preloading: Dateien sofort laden
     firstsel.preload = "auto";
     selRemove.preload = "auto";
@@ -449,102 +451,6 @@
     selRemove.load();
     unsel.load();
     applause.load();
-
-    // Web Audio API Context für zuverlässige, verzögerungsfreie Wiedergabe
-    var audioCtx = null;
-    var firstselBuffer = null;
-    
-    // Audio-Datei in einen AudioBuffer laden (für verzögerungsfreie Wiedergabe)
-    function loadAudioBuffer(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'arraybuffer';
-      xhr.onload = function() {
-        audioCtx.decodeAudioData(xhr.response, function(buffer) {
-          callback(buffer);
-        }, function() {});
-      };
-      xhr.send();
-    }
-    
-    let audioUnlocked = false;
-    function unlockAudio() {
-      if (audioUnlocked) return true;
-      audioUnlocked = true;
-      
-      // AudioContext erstellen
-      try {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      } catch(e) {
-        // Fallback auf <audio>-Elemente
-        doUnlockAudioElements();
-        return false;
-      }
-      
-      // AudioContext aktivieren (falls suspended)
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      
-      // Audio-Datei in Buffer laden für verzögerungsfreie Wiedergabe
-      loadAudioBuffer("images/67.wav", function(buffer) {
-        firstselBuffer = buffer;
-      });
-      
-      // Keep-Alive: Regelmäßig stummen Ton abspielen, damit der AudioContext
-      // nicht wieder in den "suspended" Zustand fällt
-      function keepAlive() {
-        if (audioCtx && audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-        // Kurzen, unhörbaren Ton abspielen, um den Context aktiv zu halten
-        if (audioCtx && audioCtx.state === 'running') {
-          try {
-            var osc = audioCtx.createOscillator();
-            var gain = audioCtx.createGain();
-            gain.gain.value = 0.001; // nahezu stumm
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(0);
-            osc.stop(0.001);
-          } catch(e) {}
-        }
-      }
-      // Alle 10 Sekunden Keep-Alive-Signal senden
-      setInterval(keepAlive, 10000);
-      
-      // Browser-Autoplay-Policy umgehen: <audio>-Elemente kurz abspielen
-      doUnlockAudioElements();
-      
-      return true;
-    }
-    
-    function doUnlockAudioElements() {
-      [firstsel, selRemove, unsel, applause].forEach(function(a) {
-        a.currentTime = 0;
-        var p = a.play();
-        if (p && typeof p.then === 'function') {
-          p.then(function() { a.pause(); a.currentTime = 0; })
-           .catch(function() {});
-        } else {
-          a.pause(); a.currentTime = 0;
-        }
-      });
-    }
-    
-    // Ersten Ton über Web Audio API abspielen (verzögerungsfrei)
-    function playFirstSel() {
-      if (firstselBuffer && audioCtx && audioCtx.state === 'running') {
-        // Web Audio API: Buffer abspielen - KEINE Verzögerung!
-        var source = audioCtx.createBufferSource();
-        source.buffer = firstselBuffer;
-        source.connect(audioCtx.destination);
-        source.start(0);
-      } else {
-        // Fallback auf <audio>-Element
-        firstsel.play();
-      }
-    }
 
     let gensolvable = true;
     const MAXBOARDNUM = 10000000;
@@ -580,11 +486,6 @@
         tileIds[i] = tileIds[j];
         tileIds[j] = k;
       }
-    }
-
-    function play(audioName) {
-      var audio = document.getElementById(audioName);
-      audio.play();
     }
 
     function slovableClicked(ele) {
@@ -949,6 +850,16 @@
       firstsel.play();
     }
 
+    function playFirstSel() {
+      firstsel.currentTime = 0;
+      var playPromise = firstsel.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.log("Audio playback failed:", error);
+        });
+      }
+    }
+
     let docimgs = document.images;
     let tiles = new Array(144);
     let firstSel = -1;
@@ -964,15 +875,12 @@
         }
         // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
         //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
-        if (firstSel == -1) {
-          // play("firstsel");
-          unlockAudio();
+        if (firstSel === -1) {
           playFirstSel();
           firstSel = e.target.id;
           // til.img.style.border = "1px solid #a71b1be5";
           til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
-          // firstsnd.play();
-        } else if (e.target.id == firstSel) {
+        } else if (e.target.id === firstSel) {
           unsel.play();
           firstSel = -1;
           til.img.style.filter = filter1;
@@ -981,9 +889,7 @@
         else {
           let til2 = tiles[firstSel];
           if (doTilesMatch(til, til2)) {
-            // play("selremove");
             selRemove.play();
-            // selremsnd.play();
             remove(til, til2);
             firstSel = -1;
             updateBoard();
@@ -994,19 +900,6 @@
             til2.img.style.filter = filter1;
             til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
           }
-          // if (til.type === til2.type) {
-          //   if ((til.type === "season") || (til.type === "flower")) {
-          //     play("selremove");
-          //     remove(til, til2);
-          //     firstSel = -1;
-          //   } else {
-          //     play("selremove");
-          //     remove(til, til2);;
-          //     firstSel = -1;
-          //   }
-          // }
-        }
-
       };
 
       if (types.includes(docimgs[i].alt)) {
