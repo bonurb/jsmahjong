@@ -99,8 +99,19 @@ function getSolvableGame(layout) {
     mjCube[til.x + 1][til.y][til.z] = til.img.id;
     mjCube[til.x][til.y + 1][til.z] = til.img.id;
     mjCube[til.x + 1][til.y + 1][til.z] = til.img.id;
-    til.img.style.left = (til.x * 24) + OFFSET + (til.z * DX) + "px";
-    til.img.style.top = (til.y * 35) + OFFSET - (til.z * DY) + "px";
+
+    // use scaled positions/size when helpers are available
+    if (typeof scaledLeft === "function" && typeof scaledTop === "function" && typeof scaledTileWidth === "function") {
+      til.img.style.left = scaledLeft(til.x, til.z);
+      til.img.style.top = scaledTop(til.y, til.z);
+      til.img.style.width = scaledTileWidth();
+      til.img.style.height = "auto";
+    } else {
+      til.img.style.left = ((til.x * 24) + OFFSET + (til.z * DX)) + "px";
+      til.img.style.top = ((til.y * 35) + OFFSET - (til.z * DY)) + "px";
+      til.img.style.width = "50px";
+      til.img.style.height = "auto";
+    }
 
     let til2 = p.til2;
     til2.removed = false;
@@ -109,8 +120,18 @@ function getSolvableGame(layout) {
     mjCube[til2.x + 1][til2.y][til2.z] = til2.img.id;
     mjCube[til2.x][til2.y + 1][til2.z] = til2.img.id;
     mjCube[til2.x + 1][til2.y + 1][til2.z] = til2.img.id;
-    til2.img.style.left = (til2.x * 24) + OFFSET + (til2.z * DX) + "px";
-    til2.img.style.top = (til2.y * 35) + OFFSET - (til2.z * DY) + "px";
+
+    if (typeof scaledLeft === "function" && typeof scaledTop === "function" && typeof scaledTileWidth === "function") {
+      til2.img.style.left = scaledLeft(til2.x, til2.z);
+      til2.img.style.top = scaledTop(til2.y, til2.z);
+      til2.img.style.width = scaledTileWidth();
+      til2.img.style.height = "auto";
+    } else {
+      til2.img.style.left = ((til2.x * 24) + OFFSET + (til2.z * DX)) + "px";
+      til2.img.style.top = ((til2.y * 35) + OFFSET - (til2.z * DY)) + "px";
+      til2.img.style.width = "50px";
+      til2.img.style.height = "auto";
+    }
   }
 
   // set tileIds

@@ -268,6 +268,59 @@
   <script src="layout-svg.js"></script>
   <script src="util.js"></script>
   <script>
+    /* ---------- Responsive scaling helpers (füge am Anfang des inline-<script> ein) ---------- */
+    function getBoardRect() {
+      const b = document.getElementById("board");
+      return b ? b.getBoundingClientRect() : { width: 1400, height: 630 };
+    }
+
+    function getScale() {
+      const r = getBoardRect();
+      return {
+        sx: r.width / 1400, // horizontale Skala relativ zur Referenzbreite
+        sy: r.height / 630  // vertikale Skala relativ zur Referenzhöhe
+      };
+    }
+
+    function scaledLeft(x, z) {
+      const { sx } = getScale();
+      return (((x * 24) + OFFSET + (z * DX)) * sx) + "px";
+    }
+
+    function scaledTop(y, z) {
+      const { sy } = getScale();
+      return (((y * 35) + OFFSET - (z * DY)) * sy) + "px";
+    }
+
+    function scaledTileWidth() {
+      const { sx } = getScale();
+      return (50 * sx) + "px";
+    }
+
+    function applyScaleToAllTiles() {
+      if (typeof tiles === "undefined" || !tiles) return;
+      for (let i = 0; i < tiles.length; i++) {
+        const t = tiles[i];
+        if (!t || !t.img) continue;
+        if (t.x !== -1 && !t.removed) {
+          t.img.style.left = scaledLeft(t.x, t.z);
+          t.img.style.top = scaledTop(t.y, t.z);
+          t.img.style.width = scaledTileWidth();
+          t.img.style.height = "auto";
+        }
+      }
+    }
+
+    // resize / orientation handling
+    window.addEventListener('resize', () => {
+      clearTimeout(window.__mj_resize_timer);
+      window.__mj_resize_timer = setTimeout(applyScaleToAllTiles, 80);
+    });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(applyScaleToAllTiles, 120);
+    });
+    /* ---------- end helpers ---------- */
+
     //https://stackoverflow.com/questions/46078328/change-ids-of-child-elements-in-javascript-when-cloning-an-element
     // function addItemRow() {
     //   var original = document.getElementById('profile-row' + i);
@@ -411,9 +464,9 @@
       }
     }
 
+    /* ---------- REPLACE/ERgänze layoutSelected(ele) um applyScaleToAllTiles() aufzurufen ---------- */
     function layoutSelected(ele) {
       document.getElementById("myModal").style.display = "none";
-      // console.log(ele.value + ", " + ele.options[ele.selectedIndex].text)
       var loindex = parseInt(ele.dataset.loindex);
       console.log(loindex + ", " + obj[loindex].name);
       document.getElementById("actlayout").innerHTML = obj[loindex].name;
@@ -428,10 +481,11 @@
       }
       fillMjCube(actLayout, tiles);
       placeTiles();
-      // adjustZIndex();
-      // setTilesVisible();
+      // ensure scaled positions applied
+      applyScaleToAllTiles();
       updateBoard();
     }
+    /* ---------- end layoutSelected ---------- */
 
     // parse map: https://github.com/ffalt/mah/blob/main/src/app/model/mapping.ts
 
@@ -572,9 +626,20 @@
         tile.x = x;
         tile.y = y;
         tile.z = z;
-        tile.img.style.left = (x * 24) + OFFSET + (z * DX) + "px";
-        tile.img.style.top = (y * 35) + OFFSET - (z * DY) + "px";
-        // tile.img.setAttribute("data-ix", "my data: " + lox);
+
+        // benutze die skalierten Positionen/Größen
+        if (typeof scaledLeft === "function" && typeof scaledTop === "function" && typeof scaledTileWidth === "function") {
+          tile.img.style.left = scaledLeft(x, z);
+          tile.img.style.top = scaledTop(y, z);
+          tile.img.style.width = scaledTileWidth();
+          tile.img.style.height = "auto";
+        } else {
+          // Fallback auf alte Pixel-Formel
+          tile.img.style.left = ((x * 24) + OFFSET + (z * DX)) + "px";
+          tile.img.style.top = ((y * 35) + OFFSET - (z * DY)) + "px";
+          tile.img.style.width = "50px";
+          tile.img.style.height = "auto";
+        }
 
         mjCube[x][y][z] = tid;
         mjCube[x + 1][y][z] = tid;
@@ -711,6 +776,7 @@
       }
     }
 
+    /* ---------- REPLACE placeTiles() to call applyScaleToAllTiles() am Ende ---------- */
     function placeTiles() {
       let board = document.getElementById("board");
       board.replaceChildren();
@@ -727,7 +793,11 @@
         tilesOnBoard++;
       }
       document.getElementById("tilnum").innerHTML = tilesOnBoard;
+
+      // WICHTIG: nach dem Anhängen ins DOM die Skala anwenden
+      applyScaleToAllTiles();
     }
+    /* ---------- end placeTiles ---------- */
 
     function getNextDrawable() {
       for (let z = 0; z < MAXLEV; z++) {
@@ -860,25 +930,24 @@
       }
     }
 
+    /* ---------- REPLACE tile initialization loop (die Schleife, die tiles[t] = new Tile(...)) ---------- */
+    /* Suche die Stelle, an der tiles[] initialisiert werden (docimgs-Schleife). Ersetze den Block so: */
+
     let docimgs = document.images;
     let tiles = new Array(144);
     let firstSel = -1;
     let t = 0;
     for (let i = 0; i < docimgs.length; i++) {
       docimgs[i].onclick = function (e) {
-        // log("in onClick(): " + e.target.id);
         unsel.removeEventListener("ended", playfsel);
         let til = tiles[e.target.id];
         log(til.x + '-' + til.y);
         if (!til.isSelectable()) {
           return;
         }
-        // alert(e.target.alt + "," + e.target.style.zIndex + "," + e.target.id
-        //   + "," + til.x + "-" + til.y + "-" + til.z + "### " + e.target.dataset.ix);
         if (firstSel === -1) {
           playFirstSel();
           firstSel = e.target.id;
-          // til.img.style.border = "1px solid #a71b1be5";
           til.img.style.filter = filter1 + "hue-rotate(290deg) saturate(300%)";
         } else if (e.target.id === firstSel) {
           unsel.play();
@@ -910,12 +979,18 @@
         tiles[t].img.style.filter = "drop-shadow(-8px 10px 2px rgba(0, 0, 0, 0.7))";
         tiles[t].img.style.visibility = "hidden";
         tiles[t].img.style.position = "absolute";
-        tiles[t].img.style.width = "50px";
+        // setze initiale Breite unter Verwendung der Skalen-Helper (Fallback möglich)
+        if (typeof scaledTileWidth === "function") {
+          tiles[t].img.style.width = scaledTileWidth();
+        } else {
+          tiles[t].img.style.width = "50px";
+        }
         tiles[t].img.setAttribute("draggable", false);
         tiles[t].img.style.zIndex = 0;
         t++;
       }
     }
+    /* ---------- end tile initialization loop ---------- */
 
     resetTiles();
     resetMjCube();
@@ -930,6 +1005,10 @@
     // setTilesVisible();
     // tilesOnBoard = 144;
     // document.getElementById("tilnum").innerHTML = tilesOnBoard;
+
+    // sicherstellen, dass die skalierte Position gesetzt wird
+    applyScaleToAllTiles();
+
     updateBoard();
 
     // let text = "";
